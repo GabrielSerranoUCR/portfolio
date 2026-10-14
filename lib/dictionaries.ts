@@ -1,0 +1,119 @@
+import type { Locale } from "./i18n";
+
+const en = {
+  meta: {
+    title: "Software Engineer",
+    description:
+      "Portfolio of Gabriel Serrano Rojas, a full-stack software engineer from Costa Rica.",
+  },
+  nav: {
+    about: "About",
+    experience: "Experience",
+    projects: "Projects",
+    skills: "Skills",
+    contact: "Contact",
+    resume: "Résumé",
+    switchTo: "ES",
+    switchLabel: "Ver en español",
+  },
+  hero: {
+    hello: "¡Pura vida! I'm",
+    cta: "See my work",
+    resume: "Download résumé",
+    note: "that's me!",
+    scroll: "follow the macaw",
+  },
+  sections: {
+    about: { kicker: "who am I?", title: "About" },
+    education: "Education",
+    experience: { kicker: "where I've worked", title: "Experience" },
+    projects: { kicker: "things I've built", title: "Projects" },
+    skills: { kicker: "my toolbox", title: "Skills" },
+    contact: { kicker: "say hi!", title: "Contact" },
+  },
+  project: {
+    readMore: "read more →",
+    back: "← all projects",
+    stack: "Built with",
+    role: "My role",
+    more: "more",
+    gallery: "Screenshots",
+    live: "Live site",
+    repo: "View on GitHub",
+    next: "Next project",
+  },
+  contact: {
+    intro: "Got a project, a role or just a question? Drop me a line.",
+    name: "Your name",
+    email: "Your email",
+    message: "Message",
+    send: "Send it",
+    sending: "Sending...",
+    sent: "Thanks! I'll get back to you soon.",
+    error: "Something went wrong. Try emailing me directly:",
+    or: "or find me here",
+  },
+  footer: "Made with Next.js and a scarlet macaw.",
+  credits: "Toucan photo on Unsplash by",
+};
+
+export type Dictionary = typeof en;
+
+const es: Dictionary = {
+  meta: {
+    title: "Ingeniero de Software",
+    description:
+      "Portafolio de Gabriel Serrano Rojas, ingeniero de software full-stack de Costa Rica.",
+  },
+  nav: {
+    about: "Sobre mí",
+    experience: "Experiencia",
+    projects: "Proyectos",
+    skills: "Habilidades",
+    contact: "Contacto",
+    resume: "CV",
+    switchTo: "EN",
+    switchLabel: "View in English",
+  },
+  hero: {
+    hello: "¡Pura vida! Soy",
+    cta: "Ver mi trabajo",
+    resume: "Descargar CV",
+    note: "¡ese soy yo!",
+    scroll: "seguí a la lapa",
+  },
+  sections: {
+    about: { kicker: "¿quién soy?", title: "Sobre mí" },
+    education: "Educación",
+    experience: { kicker: "dónde he trabajado", title: "Experiencia" },
+    projects: { kicker: "cosas que he construido", title: "Proyectos" },
+    skills: { kicker: "mi caja de herramientas", title: "Habilidades" },
+    contact: { kicker: "¡saludemos!", title: "Contacto" },
+  },
+  project: {
+    readMore: "ver más →",
+    back: "← todos los proyectos",
+    stack: "Hecho con",
+    role: "Mi rol",
+    more: "más",
+    gallery: "Capturas",
+    live: "Sitio en vivo",
+    repo: "Ver en GitHub",
+    next: "Siguiente proyecto",
+  },
+  contact: {
+    intro: "¿Tenés un proyecto, una vacante o solo una pregunta? Escribime.",
+    name: "Tu nombre",
+    email: "Tu correo",
+    message: "Mensaje",
+    send: "Enviar",
+    sending: "Enviando...",
+    sent: "¡Gracias! Te respondo pronto.",
+    error: "Algo salió mal. Escribime directamente a:",
+    or: "o encontrame aquí",
+  },
+  footer: "Hecho con Next.js y una lapa roja.",
+  credits: "Foto del tucán en Unsplash por",
+};
+
+export const getDictionary = (lang: Locale) => (lang === "es" ? es : en);
