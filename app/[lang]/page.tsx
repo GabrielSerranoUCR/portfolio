@@ -142,7 +142,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                 key={project.slug}
                 href={`/${lang}/projects/${project.slug}`}
                 data-perch-zone
-                className={`sheet group relative grid max-w-4xl gap-8 p-6 transition-transform duration-300 hover:-translate-y-1 sm:p-9 ${
+                className={`sheet group relative grid max-w-4xl gap-8 p-6 sm:p-9 ${
                   i % 2 ? "ml-auto" : ""
                 } ${cover ? "md:grid-cols-[1fr_15rem]" : ""}`}
               >

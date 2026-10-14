@@ -45,15 +45,46 @@ body {
   background: rgb(242 183 5 / 0.35);
 }
 
-/* A sheet of heavier white stock resting on the page. */
+/*
+ * A hollow carved into the page with rugged, cliff-like edges. The hollow is a
+ * bitmap baked per card size by components/Hollows.tsx and shown on ::before, so
+ * only its edges turn rugged and the content stays crisp. It reaches past the
+ * box (keep in sync with BLEED there) so the rim can bite outward too. Until the
+ * bitmap is ready, a plain recessed floor stands in.
+ */
 .sheet {
-  background-color: #fff;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35 0 0 0 0 .3 0 0 0 0 .22 0 0 0 .045 0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>");
-  border: 1px solid var(--color-line);
+  position: relative;
+  isolation: isolate;
+  border-radius: 0.75rem;
+}
+
+.sheet::before {
+  /* Fine grain over the floor, kept inside the rugged rim. */
+  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35 0 0 0 0 .3 0 0 0 0 .22 0 0 0 .05 0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>");
+  content: "";
+  position: absolute;
+  inset: -10px;
+  z-index: -1;
+  pointer-events: none;
+  padding: 18px;
   border-radius: 1.25rem;
-  box-shadow:
-    0 1px 2px rgb(40 30 10 / 0.04),
-    0 14px 34px -20px rgb(40 30 10 / 0.3);
+  background-origin: border-box;
+  background-image: var(--grain), var(--hollow, linear-gradient(#f1ede3, #f1ede3));
+  background-size: auto, 100% 100%;
+  background-repeat: repeat, no-repeat;
+  background-clip: content-box, border-box;
+  box-shadow: inset 0 8px 14px -6px rgb(40 30 10 / 0.3);
+  transition: filter 300ms ease;
+}
+
+.sheet[style*="--hollow"]::before {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Linked hollows darken a touch on hover, as if sinking deeper. */
+a.sheet:hover::before {
+  filter: brightness(0.96);
 }
 
 @media (prefers-reduced-motion: reduce) {

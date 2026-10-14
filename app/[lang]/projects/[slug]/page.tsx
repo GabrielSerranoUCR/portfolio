@@ -155,7 +155,7 @@ export default async function ProjectPage({ params }: Props) {
       <Link
         href={`/${lang}/projects/${next.slug}`}
         data-perch-zone
-        className="sheet group relative mt-12 ml-auto block w-fit px-7 py-5 transition-transform hover:-translate-y-1"
+        className="sheet group relative mt-12 ml-auto block w-fit px-7 py-5"
       >
         <PerchBranch />
         <p className="text-xs font-semibold tracking-[0.25em] text-scarlet uppercase">{t.project.next}</p>

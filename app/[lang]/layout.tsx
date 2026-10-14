@@ -3,6 +3,7 @@ import { Caveat, Inter, Playfair_Display } from "next/font/google";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { Birds } from "@/components/Birds";
+import { Hollows } from "@/components/Hollows";
 import { Nav } from "@/components/Nav";
 import { birdFrames } from "@/content/photos";
 import { profile } from "@/content/profile";
@@ -45,6 +46,7 @@ export default async function RootLayout({ children, params }: Props) {
       <body className="font-sans antialiased">
         <Nav lang={lang} nav={t.nav} name={profile.name} resume={profile.resume} />
         {children}
+        <Hollows />
         {/* In the layout so the macaws persist and fly across page navigations. */}
         <Birds frames={birdFrames} />
       </body>
