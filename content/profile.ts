@@ -1,0 +1,128 @@
+import type { L } from "@/lib/i18n";
+import type { Photo } from "./photos";
+
+// Text wrapped in **double asterisks** gets a hand-drawn highlight.
+
+export const profile = {
+  name: "Gabriel Serrano Rojas",
+  email: "serranogabo10@gmail.com",
+  linkedin: "https://linkedin.com/in/gabrielserranor",
+  github: "https://github.com/GabrielSerranoUCR",
+  resume: "/resume/GabrielSerranoRojas.pdf",
+  portrait: { src: "/photos/me/portrait.jpg", width: 1400, height: 1867 },
+  photos: [
+    {
+      src: "/photos/me/bookstore.jpg",
+      width: 1800,
+      height: 1350,
+      caption: { en: "At MangaKaCR", es: "En MangaKaCR" },
+    },
+    {
+      src: "/photos/me/team.jpg",
+      width: 1600,
+      height: 900,
+      caption: { en: "With the team", es: "Con el equipo" },
+    },
+  ] satisfies (Photo & { caption: L })[],
+  role: {
+    en: "Full-stack software engineer",
+    es: "Ingeniero de software full-stack",
+  },
+  tagline: {
+    en: "I build reliable software, from the database schema to the deploy pipeline.",
+    es: "Construyo software confiable, desde el esquema de la base de datos hasta el despliegue.",
+  },
+  about: [
+    {
+      en: "I'm Gabriel, a **software engineering** student at the Universidad de Costa Rica, pursuing a concurrent degree in **physics**.",
+      es: "Soy Gabriel, estudiante de **Ingeniería de Software** en la Universidad de Costa Rica, y curso en paralelo la carrera de **Física**.",
+    },
+    {
+      en: "Since 2024 I've been the full-stack engineer behind MangaKaCR, a bookstore in San José, building their point-of-sale system, e-commerce and integrations end to end. I also work as a research assistant, turning paper-based biomedical studies into offline-first software.",
+      es: "Desde 2024 soy el ingeniero full-stack detrás de MangaKaCR, una librería en San José, donde construí de punta a punta su punto de venta, su comercio electrónico y sus integraciones. También trabajo como asistente de investigación, llevando estudios biomédicos en papel a software que funciona sin conexión.",
+    },
+    {
+      en: "A scarlet macaw, one of Costa Rica's most iconic birds, will show you around.",
+      es: "Una lapa roja, una de las aves más emblemáticas de Costa Rica, te va a guiar.",
+    },
+  ] satisfies L[],
+};
+
+export const education: { degree: L; school: string; period: L }[] = [
+  {
+    degree: { en: "B.S. in Software Engineering", es: "Bachillerato en Ingeniería de Software" },
+    school: "Universidad de Costa Rica",
+    period: { en: "Mar 2023 – Dec 2026 (expected)", es: "Mar. 2023 – dic. 2026 (esperado)" },
+  },
+  {
+    degree: { en: "B.S. in Physics (concurrent degree)", es: "Bachillerato en Física (carrera simultánea)" },
+    school: "Universidad de Costa Rica",
+    period: { en: "Mar 2021 – Present", es: "Mar. 2021 – actualidad" },
+  },
+];
+
+export const experience: { role: L; org: string; place: string; period: L; bullets: L[] }[] = [
+  {
+    role: { en: "Full-Stack Engineer", es: "Ingeniero Full-Stack" },
+    org: "MangaKaCR Bookstore",
+    place: "San José, Costa Rica",
+    period: { en: "Mar 2024 – Present", es: "Mar. 2024 – actualidad" },
+    bullets: [
+      {
+        en: "Built a clean-architecture POS and inventory system (ASP.NET Core, Blazor, PostgreSQL), **reducing costs by 78%**",
+        es: "Construí un sistema de punto de venta e inventario con arquitectura limpia (ASP.NET Core, Blazor, PostgreSQL), **reduciendo costos en un 78%**",
+      },
+      {
+        en: "Implemented invoicing, layaways, cashback, audited voids and sales analytics; fixed POS concurrency races",
+        es: "Implementé facturación, apartados, cashback, anulaciones auditadas y analítica de ventas; corregí condiciones de carrera en el POS",
+      },
+      {
+        en: "Wrote **900+ xUnit and Testcontainers tests**; set up CI, CodeQL, SonarQube and Docker builds on GitHub Actions",
+        es: "Escribí **más de 900 pruebas con xUnit y Testcontainers**; configuré CI, CodeQL, SonarQube y builds de Docker en GitHub Actions",
+      },
+      {
+        en: "Developed the Wix e-commerce site (**~3,000 monthly users**, ~$2,000 monthly revenue); started a Next.js storefront (in progress)",
+        es: "Desarrollé el sitio de comercio electrónico en Wix (**~3.000 usuarios mensuales**, ~$2.000 de ingresos mensuales); inicié una tienda en Next.js (en progreso)",
+      },
+      {
+        en: "Automated a daily product-catalog PDF sync to Google Drive and integrated the tax authority's (Hacienda) API",
+        es: "Automaticé la sincronización diaria del catálogo de productos en PDF a Google Drive e integré la API de Hacienda",
+      },
+    ],
+  },
+  {
+    role: { en: "Student Research Assistant", es: "Asistente de Investigación" },
+    org: "Universidad Estatal a Distancia / Universidad de Costa Rica",
+    place: "San José, Costa Rica",
+    period: { en: "Feb 2026 – Present", es: "Feb. 2026 – actualidad" },
+    bullets: [
+      {
+        en: "Digitized biomedical questionnaires into an offline HTML/CSS/JS app that keeps patient data in local CSVs",
+        es: "Digitalicé cuestionarios biomédicos en una aplicación HTML/CSS/JS sin conexión que guarda los datos de pacientes en CSV locales",
+      },
+      {
+        en: "Built CSV merge and schema-restore tools and a response viewer to reconcile diverging questionnaires",
+        es: "Construí herramientas para fusionar CSV y restaurar esquemas, y un visor de respuestas para conciliar cuestionarios divergentes",
+      },
+      {
+        en: "Supervised the on-site migration of **600+ paper questionnaires** to the digital system used by 10 other research assistants",
+        es: "Supervisé en sitio la migración de **más de 600 cuestionarios en papel** al sistema digital que usan otros 10 asistentes de investigación",
+      },
+    ],
+  },
+];
+
+export const skills: { label: L; items: string[] }[] = [
+  {
+    label: { en: "Languages", es: "Lenguajes" },
+    items: ["C#", "TypeScript", "JavaScript", "Python", "C/C++", "SQL (PostgreSQL, SQL Server)", "HTML/CSS", "R"],
+  },
+  {
+    label: { en: "Frameworks", es: "Frameworks" },
+    items: ["ASP.NET Core", "Blazor", "EF Core", "Next.js", "React", "Node.js", "Prisma", "xUnit", "Vitest", "Playwright"],
+  },
+  {
+    label: { en: "Cloud & Tools", es: "Nube y herramientas" },
+    items: ["Git", "GitHub Actions", "Docker", "Azure", "Entra ID", "Google Cloud", "Cloudflare R2", "Supabase", "MinIO", "Wix"],
+  },
+];
