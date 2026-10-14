@@ -44,14 +44,14 @@ export default async function ProjectPage({ params }: Props) {
   const cover = project.cover ?? project.gallery?.[0];
 
   return (
-    <main className="mx-auto max-w-4xl overflow-x-clip px-5 pt-32 pb-24">
+    <main id="main" className="mx-auto max-w-4xl overflow-x-clip px-5 pt-32 pb-24">
       <header data-perch-zone className="relative">
         <PerchBranch />
         <Link href={`/${lang}#projects`} className="text-sm font-semibold text-azure hover:text-scarlet">
           {t.project.back}
         </Link>
         <p className="mt-8 text-sm text-muted">{project.period[lang]}</p>
-        <h1 className="mt-2 font-display text-5xl sm:text-7xl">{project.title}</h1>
+        <h1 className="mt-2 font-display text-5xl font-extrabold tracking-tight sm:text-7xl">{project.title}</h1>
         <p className="mt-6 max-w-2xl text-xl leading-relaxed text-muted">{project.summary[lang]}</p>
         <p className="mt-6 max-w-2xl">
           <span className="text-xs font-semibold tracking-[0.25em] text-scarlet uppercase">{t.project.role}</span>
@@ -69,15 +69,17 @@ export default async function ProjectPage({ params }: Props) {
         )}
       </header>
 
-      <dl className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
-        {project.stats.map((stat) => (
-          <div key={stat.label.en} className="sheet px-4 py-5 text-center">
-            <dt className="sr-only">{stat.label[lang]}</dt>
-            <dd className="font-display text-3xl text-scarlet">{stat.value}</dd>
-            <dd className="mt-1 text-xs leading-snug text-muted">{stat.label[lang]}</dd>
-          </div>
-        ))}
-      </dl>
+      {project.stats.length > 0 && (
+        <dl className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
+          {project.stats.map((stat) => (
+            <div key={stat.label.en} className="sheet px-4 py-5 text-center">
+              <dt className="sr-only">{stat.label[lang]}</dt>
+              <dd className="font-display text-3xl font-bold text-scarlet">{stat.value}</dd>
+              <dd className="mt-1 text-xs leading-snug text-muted">{stat.label[lang]}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
 
       {cover && (
         <div className="sheet mt-10 p-2">
@@ -104,7 +106,7 @@ export default async function ProjectPage({ params }: Props) {
       {project.sections.map((section) => (
         <section key={section.title.en} data-perch-zone className="sheet relative mt-12 p-6 sm:p-10">
           <PerchBranch />
-          <h2 className="font-display text-3xl">{section.title[lang]}</h2>
+          <h2 className="font-display text-3xl font-semibold">{section.title[lang]}</h2>
           {section.paragraphs?.map((p, i) => (
             <p key={i} className="mt-5 leading-relaxed">
               <Rich text={p[lang]} />
@@ -133,7 +135,7 @@ export default async function ProjectPage({ params }: Props) {
 
       {project.gallery && project.gallery.length > 1 && (
         <section className="mt-12">
-          <h2 className="font-display text-3xl">{t.project.gallery}</h2>
+          <h2 className="font-display text-3xl font-semibold">{t.project.gallery}</h2>
           <div className="mt-6 grid gap-6 sm:grid-cols-2">
             {project.gallery.slice(1).map((g) => (
               <figure key={g.src}>
@@ -159,7 +161,7 @@ export default async function ProjectPage({ params }: Props) {
       >
         <PerchBranch />
         <p className="text-xs font-semibold tracking-[0.25em] text-scarlet uppercase">{t.project.next}</p>
-        <p className="mt-1 font-display text-2xl group-hover:text-scarlet">{next.title} →</p>
+        <p className="mt-1 font-display text-2xl font-semibold group-hover:text-scarlet">{next.title} →</p>
       </Link>
     </main>
   );

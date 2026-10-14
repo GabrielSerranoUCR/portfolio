@@ -14,6 +14,12 @@ import type { birdFrames } from "@/content/photos";
  *   reading line. With none in view it hovers in the margin (on phones, tucked
  *   into the top-right corner under the nav so it stays out of the text).
  * - Landing dips the branch and taking off lets it spring back (`[data-branch-sway]`).
+ * - Once `[data-perch-finale]` (a photo with a branch in it) is fully in view, it heads there instead
+ *   (to the photo's branch), facing `data-perch-face` and grown to `data-perch-scale`,
+ *   and stays put there however you scroll until someone clicks (or taps) it: it
+ *   swivels on its feet, then flies off. It won't go back until
+ *   the finale's section has been scrolled out of view.
+ *   Whatever it's perched on gets `data-perched`, so the page can react to its arrival.
  * - Every flight is traced from its feet as a squiggly dashed guideline that stays on
  *   the page, so the whole route builds up as you scroll. The latest flight is drawn
  *   strongest and each finished one eases down to a faint line. It sits behind the
@@ -28,6 +34,8 @@ import type { birdFrames } from "@/content/photos";
 
 const ZONE = "[data-perch-zone]";
 const SPOT = "[data-perch-spot]";
+const FINALE = "[data-perch-finale]";
+const SWIVEL_MS = 650;
 const READING_LINE = 0.42; // fraction of viewport height
 const NAV_HEIGHT = 72;
 const BOTTOM_LIMIT = 0.88; // branches below this fraction of the viewport are out of reach
@@ -102,6 +110,8 @@ export function Birds({ frames }: { frames: Frames }) {
     let lastPose = "";
     let lastWidth = "";
     let lastPosition = "";
+    let landedOn: Element | null = null; // carries data-perched
+    let scale = 1; // eases toward the perch's data-perch-scale
     // The flight being traced, at the bird's feet in document coordinates.
     // Finished flights become their own fading paths in front of the active one.
     let trail: [number, number][] = [];
@@ -117,8 +127,51 @@ export function Birds({ frames }: { frames: Frames }) {
       return p.y - above >= NAV_HEIGHT && p.y <= innerHeight * BOTTOM_LIMIT && p.x > 0 && p.x < innerWidth;
     };
 
+    let finaleLocked = false; // after a release, until the finale's section leaves the screen
+    const swivelEl = el.firstElementChild as HTMLElement;
+    let releaseTimer = 0;
+    // A click (or tap) while it rests on the finale: swivel, then fly off.
+    const onClick = () => {
+      if (!perch?.matches(FINALE) || releaseTimer) return;
+      // On the inner wrapper, which has its own compositor layer: rotating the bird itself
+      // would also swing its page-sized translate, and without a layer Safari repaints the
+      // sprites' shadows every frame, which made the swivel stutter.
+      if (!reduceMotion) {
+        swivelEl.animate(
+          [
+            { transform: "rotate(0deg) translateY(0)" },
+            { transform: "rotate(-18deg) translateY(-4%)", offset: 0.2 },
+            { transform: "rotate(15deg) translateY(-6%)", offset: 0.45 },
+            { transform: "rotate(-9deg) translateY(-2%)", offset: 0.7 },
+            { transform: "rotate(0deg) translateY(0)" },
+          ],
+          { duration: SWIVEL_MS, easing: "ease-in-out" },
+        );
+      }
+      releaseTimer = window.setTimeout(() => {
+        finaleLocked = true;
+        releaseTimer = 0;
+      }, reduceMotion ? 0 : SWIVEL_MS);
+    };
+    el.addEventListener("click", onClick);
+
     const pickPerch = (width: number): Element | null => {
-      if (perch && document.contains(perch) && reachable(perch, width)) return perch;
+      if (finaleLocked) {
+        // Released: the finale reopens once its section has been scrolled away.
+        const section = document.querySelector(FINALE)?.closest("section");
+        const r = section?.getBoundingClientRect();
+        if (!r || r.bottom < NAV_HEIGHT || r.top > innerHeight) finaleLocked = false;
+      }
+      if (perch?.matches(FINALE)) {
+        // Settled on the finale: it stays until released, wherever the page scrolls.
+        if (!finaleLocked && document.contains(perch)) return perch;
+      } else if (!finaleLocked) {
+        // The whole finale in view (below the nav): it wins over wherever the bird is sitting.
+        const finale = document.querySelector(FINALE);
+        const r = finale?.getBoundingClientRect();
+        if (finale && r && r.top >= NAV_HEIGHT && r.bottom <= innerHeight) return finale;
+      }
+      if (perch && !perch.matches(FINALE) && document.contains(perch) && reachable(perch, width)) return perch;
       const line = innerHeight * READING_LINE;
       let best: Element | null = null;
       let bestDistance = Infinity;
@@ -162,10 +215,15 @@ export function Birds({ frames }: { frames: Frames }) {
     const tick = (now: number) => {
       const dt = Math.min(64, now - last);
       last = now;
-      const width = birdWidth();
+      const base = birdWidth();
 
       // ---- Reads first (layout is clean here), writes at the end of the frame ----
-      const next = pickPerch(width);
+      const next = pickPerch(base);
+      // Grow or shrink toward the perch's size (the finale asks for a bigger bird) over the flight there.
+      const goal = Number(next instanceof HTMLElement ? next.dataset.perchScale : undefined) || 1;
+      scale = reduceMotion ? goal : scale + (goal - scale) * Math.min(1, dt / 260);
+      if (Math.abs(goal - scale) < 0.002) scale = goal;
+      const width = base * scale;
       if (next !== perch) {
         // Taking off lets the old branch spring up.
         if (perch && !flight && !reduceMotion) kickBranch(perch, 0.05);
@@ -217,6 +275,19 @@ export function Birds({ frames }: { frames: Frames }) {
       const vy = ny - y;
       if (flying && Math.abs(vx) > 0.4) face = vx > 0 ? 1 : -1;
       if (hovering && !flying) face = -1; // look back toward the content
+      const facing = perched && perch instanceof HTMLElement ? perch.dataset.perchFace : undefined;
+      if (facing) face = facing === "left" ? -1 : 1;
+      const landed = perched ? perch! : null;
+      if (landed !== landedOn) {
+        landedOn?.removeAttribute("data-perched");
+        landed?.setAttribute("data-perched", "");
+        landedOn = landed;
+        // Only pokeable while resting on the finale; elsewhere clicks pass through to the page.
+        const pokeable = !!landed?.matches(FINALE);
+        el.style.pointerEvents = pokeable ? "auto" : "";
+        el.style.cursor = pokeable ? "pointer" : "";
+        el.style.touchAction = pokeable ? "manipulation" : "";
+      }
       faceSmooth += (face - faceSmooth) * 0.18;
       if (Math.abs(face - faceSmooth) < 0.002) faceSmooth = face;
       x = nx;
@@ -312,6 +383,9 @@ export function Birds({ frames }: { frames: Frames }) {
     frame = requestAnimationFrame(tick);
     return () => {
       cancelAnimationFrame(frame);
+      el.removeEventListener("click", onClick);
+      clearTimeout(releaseTimer);
+      landedOn?.removeAttribute("data-perched");
       if (swayEl) swayEl.style.rotate = "";
     };
   }, [frames]);
@@ -341,26 +415,29 @@ export function Birds({ frames }: { frames: Frames }) {
             transformOrigin: `${frames.feet.x * 100}% ${frames.feet.y * 100}%`,
           }}
         >
-          {/* eslint-disable @next/next/no-img-element -- sprite frames swapped every few frames */}
-          <img src={frames.up} width={frames.width} height={frames.height} alt="" draggable={false} className={`${sprite} top-0 left-0 w-full`} />
-          <img src={frames.down} width={frames.width} height={frames.height} alt="" draggable={false} className={`${sprite} top-0 left-0 w-full opacity-0`} />
-          {idle && (
-            <img
-              src={idle.src}
-              width={idle.width}
-              height={idle.height}
-              alt=""
-              draggable={false}
-              className={`${sprite} max-w-none opacity-0`}
-              // Size the resting pose relative to the flight frames and line its feet up with theirs.
-              style={{
-                width: `${(idle.width / frames.width) * 100}%`,
-                left: `${((frames.feet.x * frames.width - idle.feet.x * idle.width) / frames.width) * 100}%`,
-                top: `${((frames.feet.y * frames.height - idle.feet.y * idle.height) / frames.height) * 100}%`,
-              }}
-            />
-          )}
-          {/* eslint-enable @next/next/no-img-element */}
+          {/* Swivels around the feet when poked off the finale. */}
+          <div className="absolute inset-0 will-change-transform" style={{ transformOrigin: `${frames.feet.x * 100}% ${frames.feet.y * 100}%` }}>
+            {/* eslint-disable @next/next/no-img-element -- sprite frames swapped every few frames */}
+            <img src={frames.up} width={frames.width} height={frames.height} alt="" draggable={false} className={`${sprite} top-0 left-0 w-full`} />
+            <img src={frames.down} width={frames.width} height={frames.height} alt="" draggable={false} className={`${sprite} top-0 left-0 w-full opacity-0`} />
+            {idle && (
+              <img
+                src={idle.src}
+                width={idle.width}
+                height={idle.height}
+                alt=""
+                draggable={false}
+                className={`${sprite} max-w-none opacity-0`}
+                // Size the resting pose relative to the flight frames and line its feet up with theirs.
+                style={{
+                  width: `${(idle.width / frames.width) * 100}%`,
+                  left: `${((frames.feet.x * frames.width - idle.feet.x * idle.width) / frames.width) * 100}%`,
+                  top: `${((frames.feet.y * frames.height - idle.feet.y * idle.height) / frames.height) * 100}%`,
+                }}
+              />
+            )}
+            {/* eslint-enable @next/next/no-img-element */}
+          </div>
         </div>
       </div>
     </>

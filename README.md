@@ -1,6 +1,6 @@
 # gabrielserranorojas.com
 
-A bilingual (EN/ES) portfolio on white paper, with a scarlet macaw that flies from section to section.
+A bilingual (EN/ES) portfolio on white paper, with a macaw that flies from section to section.
 It's built with Next.js 16 (App Router), Tailwind CSS 4 and Motion.
 
 ```bash

@@ -6,7 +6,7 @@ import type { Dictionary } from "@/lib/dictionaries";
 type Status = "idle" | "sending" | "sent" | "error";
 
 const field =
-  "mt-1.5 w-full rounded-xl border border-line bg-paper/60 px-4 py-3 text-ink placeholder:text-muted/60 transition-colors focus:border-azure focus:bg-white focus:outline-none";
+  "mt-1.5 w-full rounded-xl border border-muted/70 bg-paper/60 px-4 py-3 text-ink transition-colors focus:border-azure focus:bg-white";
 
 export function ContactForm({ t, email }: { t: Dictionary["contact"]; email: string }) {
   const [status, setStatus] = useState<Status>("idle");

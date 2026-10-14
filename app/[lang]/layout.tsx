@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Caveat, Inter, Playfair_Display } from "next/font/google";
+import { Caveat, Inter, Montserrat } from "next/font/google";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { Birds } from "@/components/Birds";
@@ -11,7 +11,8 @@ import { getDictionary } from "@/lib/dictionaries";
 import { hasLocale, locales } from "@/lib/i18n";
 import "../globals.css";
 
-const display = Playfair_Display({ subsets: ["latin"], variable: "--nf-display" });
+// Three families: Montserrat for titles (weight sets the level), Inter for text, Caveat for handwritten notes.
+const display = Montserrat({ subsets: ["latin"], variable: "--nf-display" });
 const sans = Inter({ subsets: ["latin"], variable: "--nf-sans" });
 const hand = Caveat({ subsets: ["latin"], variable: "--nf-hand" });
 
@@ -44,6 +45,13 @@ export default async function RootLayout({ children, params }: Props) {
   return (
     <html lang={lang} data-scroll-behavior="smooth" className={`${display.variable} ${sans.variable} ${hand.variable}`}>
       <body className="font-sans antialiased">
+        {/* First stop for keyboard and screen-reader users: jump past the nav. */}
+        <a
+          href="#main"
+          className="fixed top-3 left-3 z-[60] -translate-y-24 rounded-full bg-ink px-4 py-2 text-sm font-semibold text-paper focus:translate-y-0"
+        >
+          {t.nav.skip}
+        </a>
         <Nav lang={lang} nav={t.nav} name={profile.name} resume={profile.resume} />
         {children}
         <Hollows />

@@ -7,6 +7,7 @@ const en = {
       "Portfolio of Gabriel Serrano Rojas, a full-stack software engineer from Costa Rica.",
   },
   nav: {
+    skip: "Skip to content",
     about: "About",
     experience: "Experience",
     projects: "Projects",
@@ -17,7 +18,6 @@ const en = {
     switchLabel: "Ver en español",
   },
   hero: {
-    hello: "¡Pura vida! I'm",
     cta: "See my work",
     resume: "Download résumé",
     note: "that's me!",
@@ -29,7 +29,7 @@ const en = {
     experience: { kicker: "where I've worked", title: "Experience" },
     projects: { kicker: "things I've built", title: "Projects" },
     skills: { kicker: "my toolbox", title: "Skills" },
-    contact: { kicker: "say hi!", title: "Contact" },
+    contact: { kicker: "email me!", title: "Contact" },
   },
   project: {
     readMore: "read more →",
@@ -52,8 +52,10 @@ const en = {
     sent: "Thanks! I'll get back to you soon.",
     error: "Something went wrong. Try emailing me directly:",
     or: "or find me here",
+    andMacaw: "and a macaw",
+    poke: "← poke me",
   },
-  footer: "Made with Next.js and a scarlet macaw.",
+  footer: "Made with Next.js and a macaw.",
   credits: "Toucan photo on Unsplash by",
 };
 
@@ -66,6 +68,7 @@ const es: Dictionary = {
       "Portafolio de Gabriel Serrano Rojas, ingeniero de software full-stack de Costa Rica.",
   },
   nav: {
+    skip: "Saltar al contenido",
     about: "Sobre mí",
     experience: "Experiencia",
     projects: "Proyectos",
@@ -76,7 +79,6 @@ const es: Dictionary = {
     switchLabel: "View in English",
   },
   hero: {
-    hello: "¡Pura vida! Soy",
     cta: "Ver mi trabajo",
     resume: "Descargar CV",
     note: "¡ese soy yo!",
@@ -88,7 +90,7 @@ const es: Dictionary = {
     experience: { kicker: "dónde he trabajado", title: "Experiencia" },
     projects: { kicker: "cosas que he construido", title: "Proyectos" },
     skills: { kicker: "mi caja de herramientas", title: "Habilidades" },
-    contact: { kicker: "¡saludemos!", title: "Contacto" },
+    contact: { kicker: "¡escribime!", title: "Contacto" },
   },
   project: {
     readMore: "ver más →",
@@ -111,8 +113,10 @@ const es: Dictionary = {
     sent: "¡Gracias! Te respondo pronto.",
     error: "Algo salió mal. Escribime directamente a:",
     or: "o encontrame aquí",
+    andMacaw: "y una lapa",
+    poke: "← apretame",
   },
-  footer: "Hecho con Next.js y una lapa roja.",
+  footer: "Hecho con Next.js y una lapa.",
   credits: "Foto del tucán en Unsplash por",
 };
 

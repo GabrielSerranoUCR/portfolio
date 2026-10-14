@@ -19,14 +19,13 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
   return (
     // Clip sideways so branches near the edge never widen the page on phones.
-    <main className="overflow-x-clip">
+    <main id="main" className="overflow-x-clip">
       <section
         data-perch-zone
         className="mx-auto grid min-h-[100svh] max-w-6xl items-center gap-14 px-5 pt-32 pb-16 md:grid-cols-[1.25fr_1fr] md:pt-44"
       >
         <div>
-          <p className="font-hand text-3xl text-scarlet">{t.hero.hello}</p>
-          <h1 className="mt-2 font-display text-6xl leading-[0.95] sm:text-8xl">{profile.name}</h1>
+          <h1 className="font-display text-6xl leading-[0.95] font-extrabold tracking-tight sm:text-8xl">{profile.name}</h1>
           <p className="mt-7 text-lg font-semibold sm:text-xl">{profile.role[lang]}</p>
           <p className="mt-2 max-w-xl text-lg text-muted">{profile.tagline[lang]}</p>
           <div className="mt-9 flex flex-wrap gap-3">
@@ -62,7 +61,11 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
           <figcaption className="mt-4 text-center font-hand text-2xl text-muted">{t.hero.note}</figcaption>
         </figure>
 
-        <p className="col-span-full text-center font-hand text-2xl text-muted">{t.hero.scroll} ↓</p>
+        <div className="col-span-full flex items-center justify-center gap-4">
+          <p className="font-hand text-4xl text-muted sm:text-5xl">{t.hero.scroll} ↓</p>
+          {/* A pencil sketch of the resting macaw, made from its idle sprite. */}
+          <Image src="/birds/macaw-sketch.png" width={348} height={927} alt="" aria-hidden className="h-28 w-auto -rotate-6 sm:h-32" />
+        </div>
       </section>
 
       <Section id="about" kicker={t.sections.about.kicker} title={t.sections.about.title}>
@@ -77,7 +80,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             <ul className="space-y-4">
               {education.map((e) => (
                 <li key={e.degree.en}>
-                  <p className="font-display text-xl">{e.degree[lang]}</p>
+                  <p className="font-display text-xl font-semibold">{e.degree[lang]}</p>
                   <p className="text-sm text-muted">
                     {e.school} · {e.period[lang]}
                   </p>
@@ -95,7 +98,8 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                     height={photo.height}
                     alt={photo.caption[lang]}
                     sizes="(min-width: 768px) 420px, 90vw"
-                    className="aspect-[4/3] w-full rounded-[0.8rem] object-cover"
+                    // Each photo keeps its own proportions; cropping the wide team shot cut people off the edges.
+                    className="h-auto w-full rounded-[0.8rem]"
                   />
                 </div>
                 <figcaption className="mt-2 text-center font-hand text-xl text-muted">{photo.caption[lang]}</figcaption>
@@ -114,7 +118,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
               />
               <div className="sheet p-6 sm:p-9">
                 <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-                  <h3 className="font-display text-2xl sm:text-3xl">{job.role[lang]}</h3>
+                  <h3 className="font-display text-2xl font-semibold sm:text-3xl">{job.role[lang]}</h3>
                   <p className="text-sm text-muted">{job.period[lang]}</p>
                 </div>
                 <p className="mt-1 font-medium text-scarlet">
@@ -123,7 +127,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                 <ul className="mt-5 space-y-2.5 leading-relaxed">
                   {job.bullets.map((b, j) => (
                     <li key={j} className="relative pl-5 before:absolute before:top-[0.6em] before:left-0 before:h-1.5 before:w-1.5 before:rounded-full before:bg-gold">
-                      <Rich text={b[lang]} />
+                      <Rich text={b[lang]} highlight={false} />
                     </li>
                   ))}
                 </ul>
@@ -148,10 +152,10 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
               >
                 <PerchBranch />
                 <div className="flex gap-6">
-                  <p className="font-display text-5xl text-line sm:text-6xl">{String(i + 1).padStart(2, "0")}</p>
+                  <p aria-hidden className="font-display text-5xl font-extralight text-muted/50 sm:text-6xl">{String(i + 1).padStart(2, "0")}</p>
                   <div>
                     <p className="text-sm text-muted">{project.period[lang]}</p>
-                    <h3 className="mt-1 font-display text-2xl transition-colors group-hover:text-scarlet sm:text-3xl">
+                    <h3 className="mt-1 font-display text-2xl font-semibold transition-colors group-hover:text-scarlet sm:text-3xl">
                       {project.title}
                     </h3>
                     <p className="mt-3 leading-relaxed text-muted">{project.summary[lang]}</p>
@@ -188,7 +192,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         <div className="grid gap-6 md:grid-cols-3">
           {skills.map((group, i) => (
             <div key={group.label.en} className="sheet p-6 sm:p-8">
-              <h3 className="flex items-center gap-2.5 font-display text-2xl">
+              <h3 className="flex items-center gap-2.5 font-display text-2xl font-semibold">
                 <span className={`h-2.5 w-2.5 rounded-full ${dots[i % dots.length]}`} />
                 {group.label[lang]}
               </h3>
@@ -206,7 +210,8 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         <div className="grid gap-10 md:grid-cols-[1.4fr_1fr]">
           <ContactForm t={t.contact} email={profile.email} />
           <div>
-            <figure className="rotate-2">
+            {/* At the end of the page the macaw lands on the photo's branch, facing the toucan and big enough to poke out of the frame, and the caption gains "and a macaw". */}
+            <figure data-perch-finale data-perch-face="right" data-perch-scale="3" className="rotate-2">
               <div className="sheet p-2">
                 <Image
                   src={toucan.src}
@@ -216,13 +221,31 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                   sizes="(min-width: 768px) 380px, 90vw"
                   className="aspect-[4/3] w-full rounded-[0.8rem] object-cover"
                 />
+                {/* On top of the mossy branch, left of the air plant; as fractions of the photo inside the p-2 padding. */}
+                <span
+                  data-branch-landing
+                  aria-hidden
+                  className="absolute block h-px w-px"
+                  style={{ left: "calc(0.5rem + (100% - 1rem) * 0.4)", top: "calc(0.5rem + (100% - 1rem) * 0.61)" }}
+                />
+                {/* A hint beside the resting macaw; clicking the bird sends it off (components/Birds.tsx). */}
+                <span aria-hidden className="poke-hint">
+                  {t.contact.poke}
+                </span>
               </div>
-              <figcaption className="mt-2 flex items-center justify-center gap-1.5 font-hand text-xl text-muted">
+              {/* Right-aligned so the resting macaw's tail, poking out below the photo, hangs clear of it. */}
+              <figcaption className="mt-2 flex items-center justify-end gap-1.5 pr-2 font-hand text-xl text-muted">
                 <PinIcon className="h-4 w-4 text-scarlet" />
-                {toucan.location[lang]}
+                <span>
+                  {toucan.location[lang]}
+                  <span aria-hidden className="finale-extra">
+                    <span>{t.contact.andMacaw}</span>
+                  </span>
+                </span>
               </figcaption>
             </figure>
-            <p className="mt-8 font-hand text-2xl text-muted">{t.contact.or}</p>
+            {/* Room below for the resting macaw's tail, which hangs past the photo and its caption. */}
+            <p className="mt-24 font-hand text-2xl text-muted">{t.contact.or}</p>
             <div className="mt-3 flex flex-wrap gap-3">
               {[
                 ["Email", `mailto:${profile.email}`],

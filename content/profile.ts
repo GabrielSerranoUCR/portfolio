@@ -21,7 +21,7 @@ export const profile = {
       src: "/photos/me/team.jpg",
       width: 1600,
       height: 900,
-      caption: { en: "With the team", es: "Con el equipo" },
+      caption: { en: "Research team at UNED", es: "Equipo de investigación en la UNED" },
     },
   ] satisfies (Photo & { caption: L })[],
   role: {
@@ -29,8 +29,8 @@ export const profile = {
     es: "Ingeniero de software full-stack",
   },
   tagline: {
-    en: "I build reliable software, from the database schema to the deploy pipeline.",
-    es: "Construyo software confiable, desde el esquema de la base de datos hasta el despliegue.",
+    en: "Every day learning new things, developing and keeping the vibes up.",
+    es: "Todos los días aprendiendo cosas nuevas, desarrollando y manteniendo la buena vibra.",
   },
   about: [
     {
@@ -38,12 +38,8 @@ export const profile = {
       es: "Soy Gabriel, estudiante de **Ingeniería de Software** en la Universidad de Costa Rica, y curso en paralelo la carrera de **Física**.",
     },
     {
-      en: "Since 2024 I've been the full-stack engineer behind MangaKaCR, a bookstore in San José, building their point-of-sale system, e-commerce and integrations end to end. I also work as a research assistant, turning paper-based biomedical studies into offline-first software.",
-      es: "Desde 2024 soy el ingeniero full-stack detrás de MangaKaCR, una librería en San José, donde construí de punta a punta su punto de venta, su comercio electrónico y sus integraciones. También trabajo como asistente de investigación, llevando estudios biomédicos en papel a software que funciona sin conexión.",
-    },
-    {
-      en: "A scarlet macaw, one of Costa Rica's most iconic birds, will show you around.",
-      es: "Una lapa roja, una de las aves más emblemáticas de Costa Rica, te va a guiar.",
+      en: "Since 2024 I've been the full-stack engineer behind MangaKaCR, a manga bookstore in San José, building their point-of-sale system, e-commerce and integrations end to end. I also work as a research assistant, turning paper-based biomedical studies into offline-first software.",
+      es: "Desde 2024 soy el ingeniero full-stack detrás de MangaKaCR, una librería de manga en San José, donde construí de punta a punta su punto de venta, su comercio electrónico y sus integraciones. También trabajo como asistente de investigación, llevando estudios biomédicos en papel a software que funciona sin conexión.",
     },
   ] satisfies L[],
 };

@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 import { PerchBranch } from "./PerchBranch";
 
-/** `**marked**` parts of a string get a gold highlighter stroke. */
-export function Rich({ text }: { text: string }) {
+/** `**marked**` parts of a string are bold, with a gold highlighter stroke unless `highlight` is off. */
+export function Rich({ text, highlight = true }: { text: string; highlight?: boolean }) {
   const parts = text.split(/\*\*(.+?)\*\*/g);
   return (
     <>
@@ -10,7 +10,7 @@ export function Rich({ text }: { text: string }) {
         i % 2 ? (
           <strong
             key={i}
-            className="bg-[linear-gradient(transparent_58%,rgb(242_183_5/0.38)_58%)] font-semibold"
+            className={`font-semibold ${highlight ? "bg-[linear-gradient(transparent_58%,rgb(242_183_5/0.38)_58%)]" : ""}`}
           >
             {part}
           </strong>
@@ -46,7 +46,7 @@ export function Section({
     <section id={id} data-perch-zone className="mx-auto max-w-6xl scroll-mt-24 px-5 py-24 sm:py-32">
       <header data-perch-spot className="relative inline-block pt-6">
         <p className="text-xs font-semibold tracking-[0.25em] text-scarlet uppercase">{kicker}</p>
-        <h2 className="mt-3 font-display text-4xl sm:text-6xl">{title}</h2>
+        <h2 className="mt-3 font-display text-4xl font-bold tracking-tight sm:text-6xl">{title}</h2>
         <PerchBranch />
       </header>
       <div className="mt-12">{children}</div>

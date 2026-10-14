@@ -58,16 +58,14 @@ const mangakaPos: Project = {
   ],
   cover: { src: "/photos/me/bookstore.jpg", width: 1800, height: 1350 },
   stats: [
-    { value: "790+", label: { en: "commits, all mine", es: "commits, todos míos" } },
-    { value: "127", label: { en: "pull requests", es: "pull requests" } },
     { value: "916", label: { en: "automated tests", es: "pruebas automatizadas" } },
     { value: "28", label: { en: "app screens", es: "pantallas" } },
     { value: "10", label: { en: "business modules", es: "módulos de negocio" } },
   ],
   overview: [
     {
-      en: "MangaKaCR is an independent manga and comics bookstore in San José. It used to run its counter sales and invoicing on a legacy system; I replaced it with a platform built from scratch around how the store actually works: counter sales with several payment methods, layaways, cash-register shifts, bulk restocks, client cashback, back-in-stock alerts and a printable catalog that updates itself every day.",
-      es: "MangaKaCR es una librería independiente de manga y cómics en San José. Antes manejaba sus ventas e inventario en un sistema heredado; lo reemplacé con una plataforma hecha desde cero alrededor de cómo trabaja realmente la tienda: ventas en mostrador con varios métodos de pago, apartados, turnos de caja, reabastecimientos masivos, cashback para clientes, avisos de reabastecimiento y un catálogo imprimible que se actualiza solo todos los días.",
+      en: "MangaKaCR is an independent manga bookstore in San José. It used to run its counter sales and invoicing on a legacy system; I replaced it with a platform built from scratch around how the store actually works: counter sales with several payment methods, layaways, cash-register shifts, bulk restocks, client cashback, back-in-stock alerts and a printable catalog that updates itself every day.",
+      es: "MangaKaCR es una librería independiente de manga en San José. Antes manejaba sus ventas e inventario en un sistema heredado; lo reemplacé con una plataforma hecha desde cero alrededor de cómo trabaja realmente la tienda: ventas en mostrador con varios métodos de pago, apartados, turnos de caja, reabastecimientos masivos, cashback para clientes, avisos de reabastecimiento y un catálogo imprimible que se actualiza solo todos los días.",
     },
     {
       en: "**I was the only person on the project.** I designed the architecture and domain model, wrote the API, the admin web app, the PDFs and emails, the 916 automated tests and the CI/CD pipelines, migrated the infrastructure mid-project, and I deploy and support it in production. The store let me publish it here.",
@@ -260,8 +258,6 @@ const lasce: Project = {
   stack: ["Next.js 16", "TypeScript", "Prisma", "PostgreSQL", "SQLAlchemy", "Vitest", "Storybook", "Playwright", "MinIO", "Turborepo"],
   links: { repo: "https://github.com/LasceUCR/lasce" },
   stats: [
-    { value: "47", label: { en: "commits", es: "commits" } },
-    { value: "8.6k", label: { en: "lines added", es: "líneas agregadas" } },
     { value: "20+", label: { en: "tested components", es: "componentes con pruebas" } },
   ],
   overview: [
@@ -351,11 +347,7 @@ const microscope: Project = {
     es: "Un panel de administración para un microscopio virtual de biología, distribuido como aplicación de Windows con su propia base de datos embebida.",
   },
   stack: ["C# / .NET", "Blazor WebAssembly", "MudBlazor", "EF Core", "PostgreSQL", "Electron", "Docker"],
-  stats: [
-    { value: "20", label: { en: "commits", es: "commits" } },
-    { value: "~10k", label: { en: "lines added", es: "líneas agregadas" } },
-    { value: "3", label: { en: "major PRs", es: "PRs principales" } },
-  ],
+  stats: [],
   overview: [
     {
       en: "The panel manages the slide collection of a virtual microscope at UCR: slides grouped by biological group (e.g. bacteria) and storage box, each with an ordered set of microscope images. A teammate had started the API with in-memory repositories; I built most of what turned it into a usable product.",
@@ -422,11 +414,7 @@ const themePark: Project = {
     es: "Un portal Web VR construido por todo el curso. Lideré a mi equipo como Scrum Master y construí el inicio de sesión y el sistema de permisos de toda la plataforma.",
   },
   stack: ["C# / .NET", "Blazor", "Microsoft Entra ID", "SQL Server", "Kiota", "xUnit", "SonarQube"],
-  stats: [
-    { value: "141", label: { en: "commits", es: "commits" } },
-    { value: "6.9k", label: { en: "lines added", es: "líneas agregadas" } },
-    { value: "SM", label: { en: "Scrum Master", es: "Scrum Master" } },
-  ],
+  stats: [],
   overview: [
     {
       en: "ThemePark@UCR is a Web VR portal that lets people explore the university through immersive tours, built by several teams in the Software Engineering and Databases integration course. Besides being Scrum Master of my team, I sat on the Project Management and Gitflow committees and owned **authentication and authorization across the whole platform**.",
@@ -501,11 +489,7 @@ const asciiNetwork: Project = {
     es: "Servidores, clientes y servidores intermediarios (“tenedores”) en C++ que cooperan sobre una red física con switches para servir dibujos en arte ASCII.",
   },
   stack: ["C++", "POSIX sockets", "Threads", "HTTP", "UDP", "L2/L3 switching"],
-  stats: [
-    { value: "47", label: { en: "commits", es: "commits" } },
-    { value: "4", label: { en: "project stages", es: "etapas del proyecto" } },
-    { value: "3.1k", label: { en: "lines added", es: "líneas agregadas" } },
-  ],
+  stats: [],
   overview: [
     {
       en: "The networks and operating systems capstone: build a service that several servers on different machines can answer redundantly. Drawing servers store ASCII-art figures in a custom file system, fork servers route clients to them, and every team's implementation has to interoperate over the course's shared protocol and physical network.",

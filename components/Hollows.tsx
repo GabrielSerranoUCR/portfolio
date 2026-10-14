@@ -23,12 +23,12 @@ function hollowSvg(width: number, height: number, seed: number) {
   <filter id="h" filterUnits="userSpaceOnUse" x="0" y="0" width="${width}" height="${height}" color-interpolation-filters="sRGB">
     <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="5" seed="${seed}" result="rock"/>
     <feDisplacementMap in="SourceGraphic" in2="rock" scale="14" xChannelSelector="R" yChannelSelector="G" result="floor"/>
-    <feFlood flood-color="#281e0a" flood-opacity="0.42"/>
+    <feFlood flood-color="#0f1a2a" flood-opacity="0.42"/>
     <feComposite in2="floor" operator="out"/>
     <feOffset dy="5"/>
     <feGaussianBlur stdDeviation="6"/>
     <feComposite in2="floor" operator="in" result="shade"/>
-    <feFlood flood-color="#281e0a" flood-opacity="0.3"/>
+    <feFlood flood-color="#0f1a2a" flood-opacity="0.3"/>
     <feComposite in2="floor" operator="out"/>
     <feGaussianBlur stdDeviation="1.2"/>
     <feComposite in2="floor" operator="in" result="lip"/>
@@ -39,7 +39,7 @@ function hollowSvg(width: number, height: number, seed: number) {
     <feComposite in2="floor" operator="in" result="glow"/>
     <feMerge><feMergeNode in="floor"/><feMergeNode in="shade"/><feMergeNode in="lip"/><feMergeNode in="glow"/></feMerge>
   </filter>
-  <rect x="${BLEED}" y="${BLEED}" width="${width - 2 * BLEED}" height="${height - 2 * BLEED}" rx="12" fill="#f1ede3" filter="url(#h)"/>
+  <rect x="${BLEED}" y="${BLEED}" width="${width - 2 * BLEED}" height="${height - 2 * BLEED}" rx="12" fill="#e9eef3" filter="url(#h)"/>
 </svg>`;
 }
 
