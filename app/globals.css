@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--nf-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--nf-display), Georgia, serif;
+  --font-hand: var(--nf-hand), "Bradley Hand", cursive;
+
+  --color-paper: #fbfaf6;
+  --color-ink: #1d1c1a;
+  --color-muted: #6d685f;
+  --color-line: #e7e2d7;
+  /* Scarlet macaw palette */
+  --color-scarlet: #d42a1f;
+  --color-gold: #f2b705;
+  --color-azure: #1f6fd1;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+:root {
+  /* Keep in sync with sizes() in components/Birds.tsx. */
+  --bird-w: clamp(150px, 13vw, 200px);
+  --branch-w: calc(var(--bird-w) * 1.55);
+}
+
+/* On phones the bird stays big but the branch is shorter, so its twigs don't reach the text. */
+@media (max-width: 639px) {
+  :root {
+    --branch-w: calc(var(--bird-w) * 1.2);
+  }
+}
+
+/* White paper: fine grain plus a soft mottling, tiled. */
+body {
+  color: var(--color-ink);
+  background-color: var(--color-paper);
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35 0 0 0 0 .3 0 0 0 0 .22 0 0 0 .07 0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><filter id='m'><feTurbulence type='fractalNoise' baseFrequency='.012' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55 0 0 0 0 .48 0 0 0 0 .35 0 0 0 .05 0'/></filter><rect width='100%25' height='100%25' filter='url(%23m)'/></svg>");
+}
+
+::selection {
+  background: rgb(242 183 5 / 0.35);
+}
+
+/* A sheet of heavier white stock resting on the page. */
+.sheet {
+  background-color: #fff;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35 0 0 0 0 .3 0 0 0 0 .22 0 0 0 .045 0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>");
+  border: 1px solid var(--color-line);
+  border-radius: 1.25rem;
+  box-shadow:
+    0 1px 2px rgb(40 30 10 / 0.04),
+    0 14px 34px -20px rgb(40 30 10 / 0.3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
