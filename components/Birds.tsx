@@ -14,6 +14,10 @@ import type { birdFrames } from "@/content/photos";
  *   reading line. With none in view it hovers in the margin (on phones, tucked
  *   into the top-right corner under the nav so it stays out of the text).
  * - Landing dips the branch and taking off lets it spring back (`[data-branch-sway]`).
+ * - Every flight is traced from its feet as a squiggly dashed guideline that stays on
+ *   the page, so the whole route builds up as you scroll. The latest flight is drawn
+ *   strongest and each finished one eases down to a faint line. It sits behind the
+ *   content, and resets on a new page or a width change, where it would no longer line up.
  *
  * The bird is positioned in document coordinates (not `position: fixed`), so
  * while perched the browser scrolls it together with its branch on the
@@ -29,6 +33,10 @@ const NAV_HEIGHT = 72;
 const BOTTOM_LIMIT = 0.88; // branches below this fraction of the viewport are out of reach
 const BEAT_MS = 110; // time per flap frame while flying
 const PHONE_MAX_WIDTH = 639; // matches Tailwind's `sm` breakpoint
+const TRAIL_STEP = 16; // px of travel between trail points; wider spacing rounds the zig-zag into a squiggle
+const TRAIL_OPACITY = 0.5; // the flight being drawn
+const TRAIL_RESTING_OPACITY = 0.07; // what finished flights fade down to
+const TRAIL_FADE_MS = 5000;
 
 type Frames = typeof birdFrames;
 type Flight = { fromX: number; fromY: number; start: number; duration: number; zigs: number; amp: number };
@@ -37,6 +45,19 @@ const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v
 /** Triangle wave in [-1, 1]: sharp zig-zag turns instead of a smooth sine. */
 const triangle = (u: number) => (2 / Math.PI) * Math.asin(Math.sin(2 * Math.PI * u));
 const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
+
+/** A smooth path through the points: curves via each point to the next midpoint, rounding the zig-zag corners. */
+function smoothPath(points: [number, number][]) {
+  if (points.length < 2) return "";
+  let d = `M${points[0][0].toFixed(1)} ${points[0][1].toFixed(1)}`;
+  for (let i = 1; i < points.length - 1; i++) {
+    const [ax, ay] = points[i];
+    const [bx, by] = points[i + 1];
+    d += `Q${ax.toFixed(1)} ${ay.toFixed(1)} ${((ax + bx) / 2).toFixed(1)} ${((ay + by) / 2).toFixed(1)}`;
+  }
+  const [lx, ly] = points[points.length - 1];
+  return `${d}L${lx.toFixed(1)} ${ly.toFixed(1)}`;
+}
 
 const spotOf = (zone: Element) =>
   Array.from(zone.querySelectorAll(SPOT)).find((s) => s.closest(ZONE) === zone) ?? zone;
@@ -54,10 +75,12 @@ function landingPoint(zone: Element) {
 
 export function Birds({ frames }: { frames: Frames }) {
   const birdRef = useRef<HTMLDivElement>(null);
+  const trailRef = useRef<SVGPathElement>(null);
 
   useEffect(() => {
     const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
     const el = birdRef.current!;
+    const trailEl = trailRef.current!;
     const [upImg, downImg, idleImg] = Array.from(el.querySelectorAll("img"));
     const aspect = frames.height / frames.width;
     // Height of the sprite above the feet, in frame units (the idle pose stands taller).
@@ -79,6 +102,11 @@ export function Birds({ frames }: { frames: Frames }) {
     let lastPose = "";
     let lastWidth = "";
     let lastPosition = "";
+    // The flight being traced, at the bird's feet in document coordinates.
+    // Finished flights become their own fading paths in front of the active one.
+    let trail: [number, number][] = [];
+    let routePage = location.pathname;
+    let routeWidth = innerWidth;
 
     // Keep in sync with --bird-w in globals.css.
     const birdWidth = () => clamp(innerWidth * 0.13, 150, 200);
@@ -221,6 +249,34 @@ export function Birds({ frames }: { frames: Frames }) {
         }
       }
 
+      if (location.pathname !== routePage || innerWidth !== routeWidth) {
+        routePage = location.pathname;
+        routeWidth = innerWidth;
+        trail = [];
+        trailEl.removeAttribute("d");
+        for (const old of trailEl.parentElement!.querySelectorAll("[data-flown]")) old.remove();
+      }
+      const feet: [number, number] = [x + width * frames.feet.x, y + width * aspect * frames.feet.y];
+      if (flying) {
+        const prev = trail[trail.length - 1];
+        if (!prev || Math.hypot(feet[0] - prev[0], feet[1] - prev[1]) >= TRAIL_STEP) trail.push(feet);
+        // Draw up to the bird itself so the line never lags behind it.
+        trailEl.setAttribute("d", smoothPath([...trail, feet]));
+      } else if (trail.length) {
+        // Landed: end this flight's line on the branch, keep it, and let it fade back.
+        const flown = trailEl.cloneNode() as SVGPathElement;
+        flown.setAttribute("d", smoothPath([...trail, feet]));
+        flown.dataset.flown = "";
+        trailEl.before(flown);
+        flown.animate([{ strokeOpacity: TRAIL_OPACITY }, { strokeOpacity: TRAIL_RESTING_OPACITY }], {
+          duration: TRAIL_FADE_MS,
+          easing: "cubic-bezier(0.3, 0, 0.2, 1)",
+          fill: "forwards",
+        });
+        trail = [];
+        trailEl.removeAttribute("d");
+      }
+
       // Only touch the DOM when something changed; a perched bird is left
       // alone so the compositor scrolls it with the page.
       // Hovering in place is pinned to the viewport so it doesn't trail the scroll.
@@ -265,38 +321,48 @@ export function Birds({ frames }: { frames: Frames }) {
   // poses is a cheap opacity change instead of a repaint of the whole bird.
   const sprite = "absolute block h-auto drop-shadow-[0_10px_8px_rgb(0_0_0/0.18)] will-change-[opacity]";
   return (
-    // Document-sized layer at the top of the page; clips sideways so the bird never widens the page.
-    <div aria-hidden className="pointer-events-none absolute top-0 left-0 z-40 h-0 w-full overflow-x-clip">
-      <div
-        ref={birdRef}
-        className="absolute top-0 left-0 opacity-0 will-change-transform"
-        // Flip and tilt around the feet so the bird stays on the branch whichever way it faces.
-        style={{
-          aspectRatio: `${frames.width} / ${frames.height}`,
-          transformOrigin: `${frames.feet.x * 100}% ${frames.feet.y * 100}%`,
-        }}
-      >
-        {/* eslint-disable @next/next/no-img-element -- sprite frames swapped every few frames */}
-        <img src={frames.up} width={frames.width} height={frames.height} alt="" draggable={false} className={`${sprite} top-0 left-0 w-full`} />
-        <img src={frames.down} width={frames.width} height={frames.height} alt="" draggable={false} className={`${sprite} top-0 left-0 w-full opacity-0`} />
-        {idle && (
-          <img
-            src={idle.src}
-            width={idle.width}
-            height={idle.height}
-            alt=""
-            draggable={false}
-            className={`${sprite} max-w-none opacity-0`}
-            // Size the resting pose relative to the flight frames and line its feet up with theirs.
-            style={{
-              width: `${(idle.width / frames.width) * 100}%`,
-              left: `${((frames.feet.x * frames.width - idle.feet.x * idle.width) / frames.width) * 100}%`,
-              top: `${((frames.feet.y * frames.height - idle.feet.y * idle.height) / frames.height) * 100}%`,
-            }}
-          />
-        )}
-        {/* eslint-enable @next/next/no-img-element */}
+    <>
+      {/* The guideline: below everything in the page, so cards and text always cover it. */}
+      <div aria-hidden className="pointer-events-none absolute top-0 left-0 -z-10 h-0 w-full overflow-x-clip">
+        <svg className="absolute top-0 left-0 overflow-visible" width="1" height="1">
+          <g className="fill-none stroke-scarlet" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" strokeDasharray="7 9">
+            <path ref={trailRef} strokeOpacity={TRAIL_OPACITY} />
+          </g>
+        </svg>
       </div>
-    </div>
+      {/* Document-sized layer at the top of the page; clips sideways so the bird never widens the page. */}
+      <div aria-hidden className="pointer-events-none absolute top-0 left-0 z-40 h-0 w-full overflow-x-clip">
+        <div
+          ref={birdRef}
+          className="absolute top-0 left-0 opacity-0 will-change-transform"
+          // Flip and tilt around the feet so the bird stays on the branch whichever way it faces.
+          style={{
+            aspectRatio: `${frames.width} / ${frames.height}`,
+            transformOrigin: `${frames.feet.x * 100}% ${frames.feet.y * 100}%`,
+          }}
+        >
+          {/* eslint-disable @next/next/no-img-element -- sprite frames swapped every few frames */}
+          <img src={frames.up} width={frames.width} height={frames.height} alt="" draggable={false} className={`${sprite} top-0 left-0 w-full`} />
+          <img src={frames.down} width={frames.width} height={frames.height} alt="" draggable={false} className={`${sprite} top-0 left-0 w-full opacity-0`} />
+          {idle && (
+            <img
+              src={idle.src}
+              width={idle.width}
+              height={idle.height}
+              alt=""
+              draggable={false}
+              className={`${sprite} max-w-none opacity-0`}
+              // Size the resting pose relative to the flight frames and line its feet up with theirs.
+              style={{
+                width: `${(idle.width / frames.width) * 100}%`,
+                left: `${((frames.feet.x * frames.width - idle.feet.x * idle.width) / frames.width) * 100}%`,
+                top: `${((frames.feet.y * frames.height - idle.feet.y * idle.height) / frames.height) * 100}%`,
+              }}
+            />
+          )}
+          {/* eslint-enable @next/next/no-img-element */}
+        </div>
+      </div>
+    </>
   );
 }
