@@ -1,0 +1,14 @@
+/node_modules
+/.next
+/out
+/dist
+next-env.d.ts
+*.tsbuildinfo
+
+.env
+.env*.local
+
+npm-debug.log*
+.DS_Store
+.idea/
+.vscode/*
