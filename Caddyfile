@@ -1,0 +1,9 @@
+gabrielserranorojas.com, www.gabrielserranorojas.com {
+	encode zstd gzip
+	reverse_proxy portfolio:3000
+}
+
+# Example: host another project on a subdomain.
+# pos.gabrielserranorojas.com {
+# 	reverse_proxy other-service:8080
+# }
