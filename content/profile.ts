@@ -69,8 +69,12 @@ export const experience: { role: L; org: string; place: string; period: L; bulle
         es: "Construí un sistema de punto de venta e inventario con arquitectura limpia (ASP.NET Core, Blazor, PostgreSQL), **reduciendo costos en un 78%**",
       },
       {
-        en: "Implemented invoicing, layaways, cashback, audited voids and sales analytics; fixed POS concurrency races",
-        es: "Implementé facturación, apartados, cashback, anulaciones auditadas y analítica de ventas; corregí condiciones de carrera en el POS",
+        en: "Implemented invoicing, layaways, cashback and audited voids; built live cross-tab sync with an in-process pub/sub",
+        es: "Implementé facturación, apartados, cashback y anulaciones auditadas; construí la sincronización en vivo entre pestañas con un pub/sub en proceso",
+      },
+      {
+        en: "Built the sales analytics: **8-dimension drill-down rankings**, period and year-over-year trends, and KPIs with layaway-aware revenue",
+        es: "Construí la analítica de ventas: **rankings con drill-down en 8 dimensiones**, tendencias contra el período y el año anterior, y KPIs que reconocen los ingresos de apartados",
       },
       {
         en: "Wrote **900+ xUnit and Testcontainers tests**; set up CI, CodeQL, SonarQube and Docker builds on GitHub Actions",

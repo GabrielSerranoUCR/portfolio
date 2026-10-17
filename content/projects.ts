@@ -64,8 +64,8 @@ const mangakaPos: Project = {
   ],
   overview: [
     {
-      en: "MangaKaCR is an independent manga bookstore in San José. It used to run its counter sales and invoicing on a legacy system; I replaced it with a platform built from scratch around how the store actually works: counter sales with several payment methods, layaways, cash-register shifts, bulk restocks, client cashback, back-in-stock alerts and a printable catalog that updates itself every day.",
-      es: "MangaKaCR es una librería independiente de manga en San José. Antes manejaba sus ventas e inventario en un sistema heredado; lo reemplacé con una plataforma hecha desde cero alrededor de cómo trabaja realmente la tienda: ventas en mostrador con varios métodos de pago, apartados, turnos de caja, reabastecimientos masivos, cashback para clientes, avisos de reabastecimiento y un catálogo imprimible que se actualiza solo todos los días.",
+      en: "MangaKaCR is an independent manga bookstore in San José. It used to run its counter sales and invoicing on a third-party accounting system; I replaced it with a platform built from scratch around how the store actually works: counter sales with several payment methods, layaways, cash-register shifts, bulk restocks, client cashback, back-in-stock alerts and a printable catalog that updates itself every day.",
+      es: "MangaKaCR es una librería independiente de manga en San José. Antes manejaba sus ventas e inventario en un sistema contable de terceros; lo reemplacé con una plataforma hecha desde cero alrededor de cómo trabaja realmente la tienda: ventas en mostrador con varios métodos de pago, apartados, turnos de caja, reabastecimientos masivos, cashback para clientes, avisos de reabastecimiento y un catálogo imprimible que se actualiza solo todos los días.",
     },
     {
       en: "**I was the only person on the project.** I designed the architecture and domain model, wrote the API, the admin web app, the PDFs and emails, the 916 automated tests and the CI/CD pipelines, migrated the infrastructure mid-project, and I deploy and support it in production. The store let me publish it here.",
@@ -104,8 +104,8 @@ const mangakaPos: Project = {
       title: { en: "Point of sale", es: "Punto de venta" },
       bullets: [
         {
-          en: "A multi-tab POS: each vendor's open draft invoices come back as tabs, scoped to whoever is signed in (I fixed a bug where carts could leak between vendors).",
-          es: "Un POS con varias pestañas: los borradores abiertos de cada vendedor se restauran como pestañas, limitados a quien inició sesión (corregí un error en el que los carritos podían filtrarse entre vendedores).",
+          en: "A multi-tab POS: each vendor's open draft invoices come back as tabs, scoped to whoever is signed in.",
+          es: "Un POS con varias pestañas: los borradores abiertos de cada vendedor se restauran como pestañas, limitados a quien inició sesión.",
         },
         {
           en: "Sales to a walk-in client or a registered one. Typing a cédula fetches the registered name from **Hacienda's public API**, cached for an hour (including not-found results) to avoid hammering the service.",
@@ -116,8 +116,8 @@ const mangakaPos: Project = {
           es: "Seis métodos de pago (efectivo con vuelto, tarjeta, transferencia, SINPE Móvil, CompraClick) más **pagos combinados** entre métodos, precios ajustables por línea y ofertas por monto o porcentaje.",
         },
         {
-          en: "Emitting an invoice decrements stock and assigns its consecutive number, continuing the legacy system's numbering through a dedicated migration so the store's sequence never broke.",
-          es: "Emitir una factura rebaja el inventario y asigna su consecutivo, continuando la numeración del sistema heredado mediante una migración dedicada para que la secuencia de la tienda nunca se rompiera.",
+          en: "Emitting an invoice decrements stock and assigns its consecutive number, continuing the third-party accounting system's numbering through a dedicated migration so the store's sequence never broke.",
+          es: "Emitir una factura rebaja el inventario y asigna su consecutivo, continuando la numeración del sistema contable de terceros mediante una migración dedicada para que la secuencia de la tienda nunca se rompiera.",
         },
         {
           en: "Voids within a 24-hour window, administrators only: stock is restored, quantity-limited offers are credited back and an audit entry is recorded.",
@@ -134,25 +134,33 @@ const mangakaPos: Project = {
       ],
     },
     {
-      title: { en: "Getting concurrency right", es: "Concurrencia sin errores" },
+      title: { en: "Live sync across open tabs", es: "Sincronización en vivo entre pestañas" },
       paragraphs: [
         {
-          en: "The trickiest bug I tracked down: to keep the cart responsive, the POS sends one request per product in parallel when it flushes a burst of edits. Each request loaded the invoice, changed its own line and wrote back totals computed from whatever lines it had seen. That is a classic lost update: a live 9-line cart emitted with the total of only 2 lines, even though all 9 lines were saved.",
-          es: "El error más difícil que rastreé: para que el carrito responda rápido, el POS envía una petición por producto en paralelo al guardar varios cambios. Cada petición cargaba la factura, cambiaba su propia línea y escribía totales calculados con las líneas que alcanzó a ver. Es una actualización perdida clásica: un carrito real de 9 líneas se emitió con el total de solo 2, aunque las 9 líneas sí se guardaron.",
-        },
-        {
-          en: "I fixed it with a **PostgreSQL transaction-scoped advisory lock keyed on the invoice number**, taken before the invoice is even read. Edits to the same invoice are serialized, different invoices still run in parallel, and the lock releases itself on commit or rollback.",
-          es: "Lo resolví con un **advisory lock de PostgreSQL con alcance de transacción, indexado por el número de factura**, que se toma antes siquiera de leer la factura. Los cambios a una misma factura se serializan, las facturas distintas siguen en paralelo y el bloqueo se libera solo al confirmar o revertir.",
+          en: "The store keeps several tabs open at once: the POS at the counter, the product grid, an edit page in the back. So that none of them works with stale stock or prices, I implemented an **in-process publish/subscribe pattern** on top of Blazor Server, where every open tab is a circuit living in the same server process.",
+          es: "En la tienda hay varias pestañas abiertas a la vez: el POS en el mostrador, la cuadrícula de productos, una página de edición en la bodega. Para que ninguna trabaje con inventario o precios desactualizados, implementé un **patrón publicador/suscriptor en proceso** sobre Blazor Server, donde cada pestaña abierta es un circuito que vive en el mismo proceso del servidor.",
         },
       ],
       bullets: [
         {
-          en: "Other races I fixed: product quantity and storage-location updates, a search box that dropped keystrokes while a page was loading, and infinite scroll returning duplicate or missing rows under concurrent edits.",
-          es: "Otras condiciones de carrera que corregí: actualizaciones de cantidad y ubicación de productos, un buscador que perdía teclas mientras cargaba una página y el scroll infinito devolviendo filas duplicadas o faltantes con ediciones concurrentes.",
+          en: "**Publishers**: two singleton notifiers, one for products and one for offers. The application services raise an event after every successful save (single edits, quantity changes, bulk price and visibility updates, offer create/edit/delete) with only the fields the screens need.",
+          es: "**Publicadores**: dos notificadores singleton, uno para productos y otro para ofertas. Los servicios de aplicación emiten un evento tras cada guardado exitoso (ediciones, cambios de cantidad, actualizaciones masivas de precio y visibilidad, creación, edición o borrado de ofertas) con solo los campos que necesitan las pantallas.",
         },
         {
-          en: "**Live sync across open tabs**: an in-process pub/sub over Blazor Server's circuits pushes stock, price, location and offer changes to every open tab without reloading. An edit page shows a notice instead of overwriting what you're typing.",
-          es: "**Sincronización en vivo entre pestañas**: un pub/sub en proceso sobre los circuitos de Blazor Server envía los cambios de inventario, precio, ubicación y ofertas a todas las pestañas abiertas sin recargar. Una página de edición muestra un aviso en lugar de sobrescribir lo que estás escribiendo.",
+          en: "**Subscribers**: the POS, the product grid and table, and the edit page subscribe when they render and unsubscribe when they're disposed. Each one marshals the event onto its own circuit before touching state, so updates arrive in place without a reload.",
+          es: "**Suscriptores**: el POS, la cuadrícula y la tabla de productos y la página de edición se suscriben al renderizarse y se desuscriben al destruirse. Cada uno pasa el evento a su propio circuito antes de tocar el estado, así los cambios llegan en el lugar sin recargar.",
+        },
+        {
+          en: "**Fault isolation**: every subscriber is invoked independently inside its own try/catch, so a closed or failing tab can't stop delivery to the rest, and a notification can never fail the save that triggered it.",
+          es: "**Aislamiento de fallos**: cada suscriptor se invoca por separado dentro de su propio try/catch, así una pestaña cerrada o con fallos no detiene la entrega a las demás, y una notificación nunca puede hacer fallar el guardado que la originó.",
+        },
+        {
+          en: "Offer events carry every affected product, including ones an edit removed from the offer, so each tab re-evaluates the right prices. An edit page only shows a notice instead of overwriting what you're typing, and ignores the echo of its own save.",
+          es: "Los eventos de ofertas incluyen todos los productos afectados, también los que una edición sacó de la oferta, para que cada pestaña recalcule los precios correctos. Una página de edición solo muestra un aviso en lugar de sobrescribir lo que estás escribiendo, e ignora el eco de su propio guardado.",
+        },
+        {
+          en: "A deliberate single-server design: scaling out behind a load balancer would swap the in-memory notifiers for a distributed backplane such as Redis pub/sub, without touching the subscribers.",
+          es: "Un diseño pensado para un solo servidor: escalar detrás de un balanceador de carga solo requeriría cambiar los notificadores en memoria por un backplane distribuido como Redis pub/sub, sin tocar a los suscriptores.",
         },
       ],
     },
@@ -199,12 +207,39 @@ const mangakaPos: Project = {
       ],
     },
     {
-      title: { en: "Analytics, administration and auditing", es: "Analítica, administración y bitácoras" },
+      title: { en: "Sales analytics", es: "Analítica de ventas" },
+      paragraphs: [
+        {
+          en: "I built the store's business-intelligence layer end to end, from the domain contracts and three API endpoints to the analytics screens, so the owners can see what sells, who buys it and how the store is doing against last month or last year.",
+          es: "Construí de punta a punta la capa de inteligencia de negocio de la tienda, desde los contratos de dominio y tres endpoints de la API hasta las pantallas de analítica, para que los dueños vean qué se vende, quién lo compra y cómo va la tienda frente al mes o al año anterior.",
+        },
+      ],
       bullets: [
         {
-          en: "Sales analytics with KPIs, top-10 breakdowns by author, collection, category, publisher, demographic, product, client and vendor, daily/weekly/monthly trends and previous-period or year-over-year comparisons, all in Costa Rica time.",
-          es: "Analítica de ventas con KPIs, top 10 por autor, colección, categoría, editorial, demografía, producto, cliente y vendedor, tendencias diarias, semanales o mensuales y comparación con el período anterior o año contra año, todo en hora de Costa Rica.",
+          en: "**Ranked breakdowns across 8 dimensions**: author, collection, category, publisher, demographic, product, client and vendor, by revenue and units, with infinite scroll and server-side search. Clicking any slice drills down: it becomes a removable filter chip that narrows every other chart.",
+          es: "**Rankings en 8 dimensiones**: autor, colección, categoría, editorial, demografía, producto, cliente y vendedor, por ingresos y unidades, con scroll infinito y búsqueda en el servidor. Al hacer clic en cualquier elemento se profundiza: se convierte en un filtro removible que acota todos los demás gráficos.",
         },
+        {
+          en: "**Trend comparisons**: revenue or units bucketed by day, week or month and overlaid on the previous period or the same range a year earlier, aligned bucket by bucket (empty days included) so the two series line up on one axis.",
+          es: "**Comparación de tendencias**: ingresos o unidades agrupados por día, semana o mes y superpuestos con el período anterior o el mismo rango del año pasado, alineados período por período (incluidos los días sin ventas) para que ambas series coincidan en un mismo eje.",
+        },
+        {
+          en: "**Honest revenue recognition**: layaway deposits count as revenue on the day they're collected, and the already-paid part of each layaway's final invoice is backed out so it's never counted twice. The average ticket uses invoices only, so deposits don't inflate it.",
+          es: "**Reconocimiento de ingresos correcto**: los abonos de apartados cuentan como ingreso el día en que se cobran, y la parte ya pagada de la factura final de cada apartado se descuenta para no contarla dos veces. El tiquete promedio usa solo facturas, para que los abonos no lo inflen.",
+        },
+        {
+          en: "Headline KPIs are computed from the full filtered dataset rather than the paged rankings, which would undercount once more products sold than fit on a page. Co-authored titles credit every author, a documented trade-off.",
+          es: "Los KPIs principales se calculan sobre todo el conjunto filtrado y no sobre los rankings paginados, que se quedarían cortos en cuanto se vendieran más productos de los que caben en una página. Los títulos con varios autores le acreditan la venta a cada uno, una decisión documentada.",
+        },
+        {
+          en: "A homepage dashboard with today's and this month's revenue, invoice count, average ticket and the month's top author and product, plus **shift reports** charting income per closed shift and the payment-method mix.",
+          es: "Un panel de inicio con los ingresos y facturas de hoy y del mes, el tiquete promedio y el autor y producto más vendidos del mes, además de **reportes de turnos** que grafican los ingresos por cierre de caja y la mezcla de métodos de pago.",
+        },
+      ],
+    },
+    {
+      title: { en: "Administration and auditing", es: "Administración y bitácoras" },
+      bullets: [
         {
           en: "Sign-in through Neon Auth. The first sign-in creates an **access request** that an administrator approves (assigning a role) or rejects. Administrators can't change their own role or status.",
           es: "Inicio de sesión con Neon Auth. El primer ingreso crea una **solicitud de acceso** que un administrador aprueba (asignando un rol) o rechaza. Los administradores no pueden cambiar su propio rol ni estado.",
@@ -326,8 +361,8 @@ const lasce: Project = {
           es: "Construí la primera versión del panel de administración (estructura, barra lateral, tarjetas de estadísticas, indicadores de estado y página de resumen) con una prueba end-to-end en Playwright.",
         },
         {
-          en: "Fixed uploaded images not loading on staging, restricted the accepted file types for uploads to MinIO, and documented the build arguments the deployment needs.",
-          es: "Corregí que las imágenes subidas no cargaran en staging, restringí los tipos de archivo aceptados al subir a MinIO y documenté los argumentos de compilación que necesita el despliegue.",
+          en: "Restricted the accepted file types for uploads to MinIO and documented the build arguments the deployment needs.",
+          es: "Restringí los tipos de archivo aceptados al subir a MinIO y documenté los argumentos de compilación que necesita el despliegue.",
         },
       ],
     },
@@ -337,7 +372,7 @@ const lasce: Project = {
 const microscope: Project = {
   slug: "virtual-microscope",
   title: "Virtual Microscope Admin Panel",
-  period: { en: "Jun 2026 – Jul 2026", es: "Jun. 2026 – jul. 2026" },
+  period: { en: "Mar 2026 – Jul 2026", es: "Mar. 2026 – jul. 2026" },
   role: {
     en: "Developer on a 3-person team: persistence, the entire frontend and desktop packaging",
     es: "Desarrollador en un equipo de 3: persistencia, todo el frontend y el empaquetado de escritorio",
@@ -379,10 +414,6 @@ const microscope: Project = {
           en: "**Server-side pagination and search** for slides: the endpoint returns a paged envelope with validated page sizes, and the table loads pages from the server with a debounced search and box filter instead of downloading everything.",
           es: "**Paginación y búsqueda del lado del servidor** para las láminas: el endpoint devuelve una respuesta paginada con tamaños validados, y la tabla carga páginas desde el servidor con búsqueda y filtro por caja con debounce en lugar de descargar todo.",
         },
-        {
-          en: "Fixed a bug where creating a slide with **6 images always failed**: once the sixth image was picked, the upload input unmounted and the browser invalidated every earlier file handle. Files are now read as soon as they're selected, which also enabled multi-select. Image order now follows list position, which removed duplicate orders.",
-          es: "Corregí un error en el que crear una lámina con **6 imágenes siempre fallaba**: al elegir la sexta imagen, el campo de carga se desmontaba y el navegador invalidaba todos los archivos anteriores. Ahora los archivos se leen apenas se seleccionan, lo que además permitió la selección múltiple. El orden de las imágenes sigue su posición en la lista, lo que eliminó órdenes duplicados.",
-        },
       ],
     },
     {
@@ -404,7 +435,7 @@ const microscope: Project = {
 const themePark: Project = {
   slug: "themepark-ucr",
   title: "ThemePark@UCR",
-  period: { en: "Aug 2025 – Dec 2025", es: "Ago. 2025 – dic. 2025" },
+  period: { en: "Sep 2025 – Dec 2025", es: "Set. 2025 – dic. 2025" },
   role: {
     en: "Scrum Master of team “Ingeniería del Pozole”; owner of authentication and authorization",
     es: "Scrum Master del equipo “Ingeniería del Pozole”; responsable de autenticación y autorización",
