@@ -58,7 +58,6 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             />
             <PerchBranch />
           </div>
-          <figcaption className="mt-4 text-center font-hand text-2xl text-muted">{t.hero.note}</figcaption>
         </figure>
 
         <div className="col-span-full flex items-center justify-center gap-4">

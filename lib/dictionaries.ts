@@ -20,7 +20,6 @@ const en = {
   hero: {
     cta: "See my work",
     resume: "Download résumé",
-    note: "that's me!",
     scroll: "follow the macaw",
   },
   sections: {
@@ -43,7 +42,7 @@ const en = {
     next: "Next project",
   },
   contact: {
-    intro: "Got a project, a role or just a question? Drop me a line.",
+    intro: "Got a project, a role or just a question? Email me.",
     name: "Your name",
     email: "Your email",
     message: "Message",
@@ -81,7 +80,6 @@ const es: Dictionary = {
   hero: {
     cta: "Ver mi trabajo",
     resume: "Descargar CV",
-    note: "¡ese soy yo!",
     scroll: "seguí a la lapa",
   },
   sections: {
@@ -104,7 +102,7 @@ const es: Dictionary = {
     next: "Siguiente proyecto",
   },
   contact: {
-    intro: "¿Tenés un proyecto, una vacante o solo una pregunta? Escribime.",
+    intro: "¿Tenés un proyecto, un rol o solo una pregunta? Escribime.",
     name: "Tu nombre",
     email: "Tu correo",
     message: "Mensaje",
