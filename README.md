@@ -28,12 +28,19 @@ The macaw (`components/Birds.tsx`) flies in a zig-zag between branches as the pa
 All text lives in `content/profile.ts` (resume content) and `lib/dictionaries.ts` (UI strings).
 In content strings, `**text**` gets a gold highlighter stroke.
 
-## Deploying to a VPS
+## Deploying (Coolify)
 
-```bash
-cp .env.example .env    # fill in the SMTP password
-docker compose up -d --build
-```
+The site runs on a VPS with [Coolify](https://coolify.io), built from the `Dockerfile`. Coolify's proxy handles HTTPS.
 
-Caddy serves the site on `gabrielserranorojas.com` with automatic HTTPS. The DNS A record needs to point at the VPS.
-To add other projects, give them their own blocks in the `Caddyfile`.
+One-time setup in Coolify:
+1. Add a new resource from this GitHub repo. Pick the **Dockerfile** build pack, branch `main` and port `3000`.
+2. Set the domains to `https://gabrielserranorojas.com,https://www.gabrielserranorojas.com`. Point their DNS A records at the VPS.
+3. Copy the variables from `.env.example` into **Environment Variables** and fill in the SMTP password.
+4. Turn off **Auto Deploy** under Advanced. The GitHub Action deploys instead.
+
+Every push to `main` runs `.github/workflows/deploy.yml`. It type-checks and builds the site, then calls Coolify's deploy webhook.
+The workflow needs two repository secrets (Settings → Secrets and variables → Actions):
+- `COOLIFY_WEBHOOK`: the resource's Deploy Webhook URL, from its **Webhooks** tab.
+- `COOLIFY_TOKEN`: a Coolify API token with the `deploy` permission, from **Keys & Tokens → API tokens**.
+
+To redeploy without pushing, run the workflow manually from the Actions tab.

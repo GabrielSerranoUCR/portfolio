@@ -1,0 +1,36 @@
+# Type-check and build every push to main, then have Coolify rebuild and redeploy the Docker image.
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Never run two deploys at once; a newer push supersedes a queued one.
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+
+  deploy:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      # COOLIFY_WEBHOOK: the resource's Deploy Webhook URL (Webhooks tab).
+      # COOLIFY_TOKEN: an API token with the "deploy" permission (Keys & Tokens → API tokens).
+      - name: Trigger Coolify deployment
+        run: curl --fail-with-body -sS -H "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}" "${{ secrets.COOLIFY_WEBHOOK }}"
