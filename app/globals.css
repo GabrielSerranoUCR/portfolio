@@ -32,13 +32,15 @@ html {
   }
 }
 
-/* Cool white paper: fine grain plus a soft mottling, tiled. */
+/*
+ * Cool white paper: fine grain plus a soft mottling, tiled. Baked PNGs (scripts/paper-textures.mjs),
+ * not live SVG filters, which re-ran on every repaint under the macaw's guideline and made it stutter.
+ */
 body {
   color: var(--color-ink);
   background-color: var(--color-paper);
-  background-image:
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .22 0 0 0 0 .28 0 0 0 0 .36 0 0 0 .07 0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>"),
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><filter id='m'><feTurbulence type='fractalNoise' baseFrequency='.012' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35 0 0 0 0 .45 0 0 0 0 .58 0 0 0 .05 0'/></filter><rect width='100%25' height='100%25' filter='url(%23m)'/></svg>");
+  background-image: url("/paper/grain.png"), url("/paper/mottle.png");
+  background-size: 220px 220px, 600px 600px;
 }
 
 /* A clear focus ring for keyboard users on every link, button and field. */
@@ -67,7 +69,7 @@ body {
 
 .sheet::before {
   /* Fine grain over the floor, kept inside the rugged rim. */
-  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .22 0 0 0 0 .28 0 0 0 0 .36 0 0 0 .05 0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>");
+  --grain: url("/paper/grain-light.png");
   content: "";
   position: absolute;
   inset: -10px;
@@ -77,7 +79,7 @@ body {
   border-radius: 1.25rem;
   background-origin: border-box;
   background-image: var(--grain), var(--hollow, linear-gradient(#e9eef3, #e9eef3));
-  background-size: auto, 100% 100%;
+  background-size: 220px 220px, 100% 100%;
   background-repeat: repeat, no-repeat;
   background-clip: content-box, border-box;
   box-shadow: inset 0 8px 14px -6px rgb(15 26 42 / 0.3);

@@ -396,9 +396,10 @@ export function Birds({ frames }: { frames: Frames }) {
   const sprite = "absolute block h-auto drop-shadow-[0_10px_8px_rgb(0_0_0/0.18)] will-change-[opacity]";
   return (
     <>
-      {/* The guideline: below everything in the page, so cards and text always cover it. */}
+      {/* The guideline: below everything in the page, so cards and text always cover it.
+          Its own layer, so redrawing it every frame of a flight doesn't repaint the page too. */}
       <div aria-hidden className="pointer-events-none absolute top-0 left-0 -z-10 h-0 w-full overflow-x-clip">
-        <svg className="absolute top-0 left-0 overflow-visible" width="1" height="1">
+        <svg className="absolute top-0 left-0 overflow-visible will-change-transform" width="1" height="1">
           <g className="fill-none stroke-scarlet" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" strokeDasharray="7 9">
             <path ref={trailRef} strokeOpacity={TRAIL_OPACITY} />
           </g>
