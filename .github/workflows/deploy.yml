@@ -34,4 +34,4 @@ jobs:
       # COOLIFY_TOKEN: an API token with the "deploy" permission (Keys & Tokens → API tokens).
       - name: Trigger Coolify deployment
         run: |
-          curl --fail-with-body -sS -H "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}" "${{ secrets.COOLIFY_WEBHOOK }}"
+          curl --fail-with-body -sS -X POST -H "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}" "${{ secrets.COOLIFY_WEBHOOK }}"
