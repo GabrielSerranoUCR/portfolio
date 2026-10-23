@@ -13,6 +13,7 @@ const en = {
     projects: "Projects",
     skills: "Skills",
     contact: "Contact",
+    extras: "Extras",
     resume: "Résumé",
     switchTo: "ES",
     switchLabel: "Ver en español",
@@ -29,6 +30,7 @@ const en = {
     projects: { kicker: "things I've built", title: "Projects" },
     skills: { kicker: "my toolbox", title: "Skills" },
     contact: { kicker: "email me!", title: "Contact" },
+    extras: { kicker: "beyond the code", title: "Extras" },
   },
   project: {
     readMore: "read more →",
@@ -77,6 +79,7 @@ const es: Dictionary = {
     projects: "Proyectos",
     skills: "Habilidades",
     contact: "Contacto",
+    extras: "Extras",
     resume: "CV",
     switchTo: "EN",
     switchLabel: "View in English",
@@ -93,6 +96,7 @@ const es: Dictionary = {
     projects: { kicker: "cosas que he construido", title: "Proyectos" },
     skills: { kicker: "mi caja de herramientas", title: "Habilidades" },
     contact: { kicker: "¡escribime!", title: "Contacto" },
+    extras: { kicker: "más allá del código", title: "Extras" },
   },
   project: {
     readMore: "ver más →",

@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import type { Dictionary } from "@/lib/dictionaries";
 import type { Locale } from "@/lib/i18n";
 
-const anchors = ["about", "experience", "projects", "skills", "contact"] as const;
+const anchors = ["about", "experience", "projects", "skills", "contact", "extras"] as const;
 const NAV_HEIGHT = 72;
 const SPOT_KEY = "lang-switch-spot";
 // Structural elements only: inline ones like <strong> differ between translations.

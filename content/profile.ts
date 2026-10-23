@@ -126,3 +126,40 @@ export const skills: { label: L; items: string[] }[] = [
     items: ["Git", "GitHub Actions", "Docker", "Azure", "Entra ID", "Google Cloud", "Cloudflare R2", "Supabase", "MinIO", "Wix"],
   },
 ];
+
+/** Life outside the code, after the contact section. */
+export const extras = {
+  podcast: {
+    youtubeId: "ltSKzyDhLzY",
+    title: "¿Quién controla nuestra atención?",
+    subtitle: { en: "A software engineer podcast", es: "Un podcast de ingeniería de software" } satisfies L,
+  },
+  photos: [
+    {
+      src: "/photos/extra/user-stories.jpg",
+      width: 1600,
+      height: 1200,
+      // Shifted left of centre so the square crop keeps both people at the whiteboard.
+      focus: "40% 50%",
+      caption: {
+        en: "Brainstorming and formulating user stories for the ThemePark@UCR project",
+        es: "Lluvia de ideas y redacción de historias de usuario para el proyecto ThemePark@UCR",
+      },
+    },
+    {
+      src: "/photos/extra/ngabe-research.jpg",
+      width: 1600,
+      height: 1200,
+      caption: {
+        en: "Taking part in mental health research in a Ngäbe Indigenous community in San Vito, Coto Brus",
+        es: "Participando en una investigación de salud mental en una comunidad indígena Ngäbe en San Vito, Coto Brus",
+      },
+    },
+    {
+      src: "/photos/extra/bruna.jpg",
+      width: 1200,
+      height: 1600,
+      caption: { en: "The center of my universe, my dog Bruna", es: "El centro de mi universo, mi perrita Bruna" },
+    },
+  ] satisfies (Photo & { caption: L; focus?: string })[],
+};

@@ -5,7 +5,7 @@ import { ContactForm } from "@/components/ContactForm";
 import { PerchBranch } from "@/components/PerchBranch";
 import { Chip, PinIcon, Rich, Section } from "@/components/ui";
 import { toucan } from "@/content/photos";
-import { education, experience, profile, skills } from "@/content/profile";
+import { education, experience, extras, profile, skills } from "@/content/profile";
 import { projects } from "@/content/projects";
 import { getDictionary } from "@/lib/dictionaries";
 import { hasLocale } from "@/lib/i18n";
@@ -263,6 +263,44 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
               ))}
             </div>
           </div>
+        </div>
+      </Section>
+
+      <Section id="extras" kicker={t.sections.extras.kicker} title={t.sections.extras.title}>
+        <div className="sheet mx-auto max-w-4xl p-2 sm:p-3">
+          <iframe
+            src={`https://www.youtube-nocookie.com/embed/${extras.podcast.youtubeId}`}
+            title={extras.podcast.title}
+            loading="lazy"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            referrerPolicy="strict-origin-when-cross-origin"
+            className="aspect-video w-full rounded-[0.8rem]"
+          />
+        </div>
+        <div className="mx-auto mt-4 max-w-4xl text-center">
+          <p className="font-display text-2xl font-semibold">{extras.podcast.title}</p>
+          <p className="font-hand text-xl text-muted">{extras.podcast.subtitle[lang]}</p>
+        </div>
+
+        <div className="mt-20 grid gap-12 md:grid-cols-3 md:gap-8">
+          {extras.photos.map((photo, i) => (
+            <figure key={photo.src} className={i % 2 ? "rotate-2" : "-rotate-2"}>
+              <div className="sheet p-2">
+                <Image
+                  src={photo.src}
+                  width={photo.width}
+                  height={photo.height}
+                  alt={photo.caption[lang]}
+                  sizes="(min-width: 768px) 360px, 90vw"
+                  // Cropped to one square size, so the landscape shots and Bruna's portrait line up.
+                  style={{ objectPosition: "focus" in photo ? photo.focus : undefined }}
+                  className="aspect-square w-full rounded-[0.8rem] object-cover"
+                />
+              </div>
+              <figcaption className="mt-2 text-center font-hand text-xl text-muted">{photo.caption[lang]}</figcaption>
+            </figure>
+          ))}
         </div>
       </Section>
 
