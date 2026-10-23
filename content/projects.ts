@@ -21,9 +21,20 @@ export type Project = {
   links?: { live?: string; repo?: string };
   /** Card / header image; falls back to the first gallery image. */
   cover?: Photo;
-  /** Screenshots in /public/projects/<slug>/ */
-  gallery?: (Photo & { caption: L })[];
+  /** Screenshots in /public/projects/<slug>/; `description` shows beside the enlarged image. */
+  gallery?: GalleryImage[];
 };
+
+export type GalleryImage = Photo & { caption: L; description?: L };
+
+/** A 1440×1000 screenshot of the MangaKaCR app. */
+const mangakaShot = (file: string, caption: L, description: L): GalleryImage => ({
+  src: `/projects/mangakacr-pos/${file}.png`,
+  width: 1440,
+  height: 1000,
+  caption,
+  description,
+});
 
 const mangakaPos: Project = {
   slug: "mangakacr-pos",
@@ -57,6 +68,184 @@ const mangakaPos: Project = {
     "SonarQube",
   ],
   cover: { src: "/photos/me/bookstore.jpg", width: 1800, height: 1350 },
+  gallery: [
+    mangakaShot(
+      "home",
+      { en: "Home dashboard", es: "Panel de inicio" },
+      {
+        en: "Today's and this month's revenue, invoice count and average ticket, the month's top author and product, the open shift and a 7-day revenue trend, with shortcuts to every module.",
+        es: "Ingresos y facturas de hoy y del mes, tiquete promedio, el autor y el producto más vendidos del mes, el turno abierto y la tendencia de ingresos de 7 días, con accesos rápidos a cada módulo.",
+      },
+    ),
+    mangakaShot(
+      "invoicing-pos",
+      { en: "Point of sale", es: "Punto de venta" },
+      {
+        en: "The product grid with live stock on the left and the invoice being built on the right. Each vendor's open drafts come back as tabs along the bottom, and the client is found or created by cédula.",
+        es: "La cuadrícula de productos con inventario en vivo a la izquierda y la factura en construcción a la derecha. Los borradores abiertos de cada vendedor vuelven como pestañas abajo, y el cliente se busca o se crea por cédula.",
+      },
+    ),
+    mangakaShot(
+      "invoicing-all",
+      { en: "Invoice register", es: "Registro de facturas" },
+      {
+        en: "Every emitted invoice, searchable by number or client. From the detail an invoice can be printed as a ticket, emailed or downloaded as a receipt, or voided within 24 hours.",
+        es: "Todas las facturas emitidas, con búsqueda por número o cliente. Desde el detalle se imprime el tiquete, se envía o descarga el recibo, o se anula dentro de las 24 horas.",
+      },
+    ),
+    mangakaShot(
+      "invoicing-apartados",
+      { en: "Layaways", es: "Apartados" },
+      {
+        en: "A layaway with its reserved products at the prices locked when it was created, the payments so far and the pending balance. From here it takes another payment, gets cancelled or becomes the final invoice.",
+        es: "Un apartado con sus productos reservados al precio congelado al crearlo, los abonos hechos y el saldo pendiente. Desde aquí se abona, se cancela o se convierte en la factura final.",
+      },
+    ),
+    mangakaShot(
+      "invoicing-shifts",
+      { en: "Cash-register shifts", es: "Turnos de caja" },
+      {
+        en: "The open shift: starting cash, sales by payment method, cash-ins and the money expected in the drawer, next to the history of closed shifts.",
+        es: "El turno abierto: base inicial, ventas por método de pago, ingresos de efectivo y el dinero esperado en caja, junto al historial de cierres.",
+      },
+    ),
+    mangakaShot(
+      "catalog-products",
+      { en: "Products", es: "Productos" },
+      {
+        en: "The product table with search and filters, quantity and storage location editable in place, bulk selection and per-row actions such as duplicating a product.",
+        es: "La tabla de productos con búsqueda y filtros, cantidad y ubicación en bodega editables en el lugar, selección masiva y acciones por fila como duplicar un producto.",
+      },
+    ),
+    mangakaShot(
+      "catalog-products-add-product",
+      { en: "New product", es: "Nuevo producto" },
+      {
+        en: "Price, stock and online visibility; type, collection, demographic, publisher, authors and categories (each can be created on the spot); images uploaded to Cloudflare R2; and cost, storage location and CABYS tax code.",
+        es: "Precio, cantidad y visibilidad en la tienda en línea; tipo, colección, demografía, editorial, autores y categorías (cada uno se puede crear ahí mismo); imágenes subidas a Cloudflare R2; y costo, ubicación en bodega y código CABYS.",
+      },
+    ),
+    mangakaShot(
+      "users-clients",
+      { en: "Clients", es: "Clientes" },
+      {
+        en: "The client directory, searchable by name, phone or ID number. Registered clients accrue cashback and can watch sold-out products.",
+        es: "El directorio de clientes, con búsqueda por nombre, teléfono o identificación. Los clientes registrados acumulan cashback y pueden seguir productos agotados.",
+      },
+    ),
+    mangakaShot(
+      "administration",
+      { en: "Administration", es: "Administración" },
+      {
+        en: "The administrators' hub: catalog lists, bulk restocks, sales and shift analytics, company settings, users and audit trails.",
+        es: "El centro de los administradores: listas del catálogo, reabastecimientos masivos, analítica de ventas y turnos, datos de la empresa, usuarios y bitácoras.",
+      },
+    ),
+    mangakaShot(
+      "administration-analytics-invoices",
+      { en: "Sales analytics", es: "Analítica de ventas" },
+      {
+        en: "Revenue or units by day, week or month, overlaid on the previous period or the same range a year earlier. Below, ranked breakdowns by author, collection, category and more; clicking one filters every other chart.",
+        es: "Ingresos o unidades por día, semana o mes, superpuestos con el período anterior o el mismo rango del año pasado. Abajo, rankings por autor, colección, categoría y más; al hacer clic en uno se filtran todos los demás gráficos.",
+      },
+    ),
+    mangakaShot(
+      "administration-invoicing-shifts-reports",
+      { en: "Shift reports", es: "Reportes de turnos" },
+      {
+        en: "Income per closed shift over a date range, and the mix of payment methods it came in through.",
+        es: "Los ingresos de cada cierre de caja en un rango de fechas y la mezcla de métodos de pago con que entraron.",
+      },
+    ),
+    mangakaShot(
+      "administration-catalog-restocks",
+      { en: "Bulk restocks", es: "Reabastecimientos masivos" },
+      {
+        en: "Restocks can be saved as drafts and resumed. Once applied, a restock updates every product's stock and location and freezes this report of what was added.",
+        es: "Los reabastecimientos se guardan como borradores y se retoman. Al aplicarse actualizan el inventario y la ubicación de cada producto y congelan este reporte de lo agregado.",
+      },
+    ),
+    mangakaShot(
+      "administration-catalog-authors",
+      { en: "Authors", es: "Autores" },
+      {
+        en: "Pick an author to see their products, then add or remove products in bulk. The same layout serves categories, collections, demographics, publishers and types.",
+        es: "Al elegir un autor se ven sus productos, y se pueden agregar o quitar en lote. El mismo diseño sirve para categorías, colecciones, demografías, editoriales y tipos.",
+      },
+    ),
+    mangakaShot(
+      "administration-catalog-categories",
+      { en: "Categories", es: "Categorías" },
+      {
+        en: "Genres and themes, from action to yuri, each with the products tagged in it.",
+        es: "Géneros y temas, de acción a yuri, cada uno con los productos que lo llevan.",
+      },
+    ),
+    mangakaShot(
+      "administration-catalog-collections",
+      { en: "Collections", es: "Colecciones" },
+      {
+        en: "A collection groups every volume of a series, and can carry alternate names so the series is found however it's searched.",
+        es: "Una colección agrupa todos los tomos de una serie y puede tener nombres alternativos, para encontrarla se busque como se busque.",
+      },
+    ),
+    mangakaShot(
+      "administration-catalog-demographies",
+      { en: "Demographics", es: "Demografías" },
+      {
+        en: "The target audience of each title, and the products in each.",
+        es: "El público al que va dirigido cada título, y los productos de cada uno.",
+      },
+    ),
+    mangakaShot(
+      "administration-catalog-publishers",
+      { en: "Publishers", es: "Editoriales" },
+      {
+        en: "Publishers, shown on every product card in the POS and the product grid.",
+        es: "Las editoriales, que se muestran en cada producto del POS y de la cuadrícula.",
+      },
+    ),
+    mangakaShot(
+      "administration-catalog-types",
+      { en: "Product types", es: "Tipos de producto" },
+      {
+        en: "Manga, manhwa, light novels, artbooks, comics and the rest of what the store sells.",
+        es: "Manga, manhwa, novelas ligeras, artbooks, cómics y el resto de lo que vende la tienda.",
+      },
+    ),
+    mangakaShot(
+      "administration-audit-clients",
+      { en: "Client audit trail", es: "Bitácora de clientes" },
+      {
+        en: "Who created, changed or deleted each client, and when.",
+        es: "Quién creó, modificó o eliminó cada cliente, y cuándo.",
+      },
+    ),
+    mangakaShot(
+      "administration-audit-products",
+      { en: "Product audit trail", es: "Bitácora de productos" },
+      {
+        en: "Field-level detail: every price and quantity change shows the old and new value, and an applied restock logs one entry per product.",
+        es: "Detalle por campo: cada cambio de precio o cantidad muestra el valor anterior y el nuevo, y un reabastecimiento aplicado registra una entrada por producto.",
+      },
+    ),
+    mangakaShot(
+      "administration-users",
+      { en: "Users", es: "Usuarios" },
+      {
+        en: "Staff accounts. Administrators assign roles and revoke or restore access, but can't change their own.",
+        es: "Las cuentas del personal. Los administradores asignan roles y quitan o restauran el acceso, pero no pueden cambiar el suyo.",
+      },
+    ),
+    mangakaShot(
+      "administration-invoicing-company",
+      { en: "Company settings", es: "Datos de la empresa" },
+      {
+        en: "Owner, ID, economic activity, tax regime, terms and notes, all printed on every ticket and receipt.",
+        es: "Propietario, identificación, actividad económica, régimen tributario, términos y notas, que se imprimen en cada tiquete y recibo.",
+      },
+    ),
+  ],
   stats: [
     { value: "916", label: { en: "automated tests", es: "pruebas automatizadas" } },
     { value: "28", label: { en: "app screens", es: "pantallas" } },

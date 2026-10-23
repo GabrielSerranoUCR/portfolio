@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PerchBranch } from "@/components/PerchBranch";
+import { Gallery } from "@/components/Gallery";
 import { Chip, Rich } from "@/components/ui";
 import { projects } from "@/content/projects";
 import { getDictionary } from "@/lib/dictionaries";
@@ -133,24 +134,10 @@ export default async function ProjectPage({ params }: Props) {
         </div>
       </section>
 
-      {project.gallery && project.gallery.length > 1 && (
+      {project.gallery && project.gallery.length > 0 && (
         <section className="mt-12">
           <h2 className="font-display text-3xl font-semibold">{t.project.gallery}</h2>
-          <div className="mt-6 grid gap-6 sm:grid-cols-2">
-            {project.gallery.slice(1).map((g) => (
-              <figure key={g.src}>
-                <Image
-                  src={g.src}
-                  width={g.width}
-                  height={g.height}
-                  alt={g.caption[lang]}
-                  sizes="(min-width: 640px) 420px, 90vw"
-                  className="w-full rounded-xl border border-line"
-                />
-                <figcaption className="mt-2 font-hand text-lg text-muted">{g.caption[lang]}</figcaption>
-              </figure>
-            ))}
-          </div>
+          <Gallery items={project.gallery} lang={lang} t={t.project} />
         </section>
       )}
 
