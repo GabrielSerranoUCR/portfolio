@@ -77,12 +77,16 @@ export const experience: { role: L; org: string; place: string; period: L; bulle
         es: "Construí la analítica de ventas: **rankings con drill-down en 8 dimensiones**, tendencias contra el período y el año anterior, y KPIs que reconocen los ingresos de apartados",
       },
       {
-        en: "Wrote **900+ xUnit and Testcontainers tests**; set up CI, CodeQL, SonarQube and Docker builds on GitHub Actions",
-        es: "Escribí **más de 900 pruebas con xUnit y Testcontainers**; configuré CI, CodeQL, SonarQube y builds de Docker en GitHub Actions",
+        en: "Wrote **1,300+ xUnit and Testcontainers tests**; set up CI, CodeQL, SonarQube and Docker builds on GitHub Actions",
+        es: "Escribí **más de 1.300 pruebas con xUnit y Testcontainers**; configuré CI, CodeQL, SonarQube y builds de Docker en GitHub Actions",
       },
       {
-        en: "Developed the Wix e-commerce site (**~3,000 monthly users**, ~$2,000 monthly revenue); started a Next.js storefront (in progress)",
-        es: "Desarrollé el sitio de comercio electrónico en Wix (**~3.000 usuarios mensuales**, ~$2.000 de ingresos mensuales); inicié una tienda en Next.js (en progreso)",
+        en: "Developed the Wix e-commerce site (**~3,000 monthly users**, ~$2,000 monthly revenue), then replaced it with a custom **Next.js online store** (mangaka.co.cr)",
+        es: "Desarrollé el sitio de comercio electrónico en Wix (**~3.000 usuarios mensuales**, ~$2.000 de ingresos mensuales) y luego lo reemplacé con una **tienda en línea propia en Next.js** (mangaka.co.cr)",
+      },
+      {
+        en: "Built the storefront's accounts with WhatsApp verification, persistent carts, online orders wired to the POS, and **Correos de Costa Rica** shipment tracking",
+        es: "Construí las cuentas de la tienda con verificación por WhatsApp, carritos persistentes, pedidos en línea conectados al POS y rastreo de envíos con **Correos de Costa Rica**",
       },
       {
         en: "Automated a daily product-catalog PDF sync to Google Drive and integrated the tax authority's (Hacienda) API",
