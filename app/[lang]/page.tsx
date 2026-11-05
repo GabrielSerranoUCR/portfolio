@@ -63,7 +63,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         <div className="col-span-full flex items-center justify-center gap-4">
           <p className="font-hand text-4xl text-muted sm:text-5xl">{t.hero.scroll} ↓</p>
           {/* A pencil sketch of the resting macaw, made from its idle sprite. */}
-          <Image src="/birds/macaw-sketch.png" width={348} height={927} alt="" aria-hidden className="h-28 w-auto -rotate-6 sm:h-32" />
+          <Image src="/birds/macaw-sketch.webp" width={348} height={927} alt="" aria-hidden className="h-28 w-auto -rotate-6 sm:h-32" />
         </div>
       </section>
 

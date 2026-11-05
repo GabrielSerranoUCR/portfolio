@@ -9,16 +9,16 @@ export const profile = {
   linkedin: "https://linkedin.com/in/gabrielserranor",
   github: "https://github.com/GabrielSerranoUCR",
   resume: "/resume/GabrielSerranoRojas.pdf",
-  portrait: { src: "/photos/me/portrait.jpg", width: 1400, height: 1867 },
+  portrait: { src: "/photos/me/portrait.webp", width: 1400, height: 1867 },
   photos: [
     {
-      src: "/photos/me/bookstore.jpg",
+      src: "/photos/me/bookstore.webp",
       width: 1800,
       height: 1350,
       caption: { en: "At MangaKaCR", es: "En MangaKaCR" },
     },
     {
-      src: "/photos/me/team.jpg",
+      src: "/photos/me/team.webp",
       width: 1600,
       height: 900,
       caption: { en: "Research team at UNED", es: "Equipo de investigación en la UNED" },
@@ -136,7 +136,7 @@ export const extras = {
   },
   photos: [
     {
-      src: "/photos/extra/user-stories.jpg",
+      src: "/photos/extra/user-stories.webp",
       width: 1600,
       height: 1200,
       // Shifted left of centre so the square crop keeps both people at the whiteboard.
@@ -147,7 +147,7 @@ export const extras = {
       },
     },
     {
-      src: "/photos/extra/ngabe-research.jpg",
+      src: "/photos/extra/ngabe-research.webp",
       width: 1600,
       height: 1200,
       caption: {
@@ -156,7 +156,7 @@ export const extras = {
       },
     },
     {
-      src: "/photos/extra/bruna.jpg",
+      src: "/photos/extra/bruna.webp",
       width: 1200,
       height: 1600,
       caption: { en: "The center of my universe, my dog Bruna", es: "El centro de mi universo, mi perrita Bruna" },

@@ -29,7 +29,7 @@ export type GalleryImage = Photo & { caption: L; description?: L };
 
 /** A 1440×1000 screenshot of the MangaKaCR app. */
 const mangakaShot = (file: string, caption: L, description: L): GalleryImage => ({
-  src: `/projects/mangakacr-pos/${file}.png`,
+  src: `/projects/mangakacr-pos/${file}.webp`,
   width: 1440,
   height: 1000,
   caption,
@@ -67,7 +67,7 @@ const mangakaPos: Project = {
     "CodeQL",
     "SonarQube",
   ],
-  cover: { src: "/photos/me/bookstore.jpg", width: 1800, height: 1350 },
+  cover: { src: "/photos/me/bookstore.webp", width: 1800, height: 1350 },
   gallery: [
     mangakaShot(
       "home",
