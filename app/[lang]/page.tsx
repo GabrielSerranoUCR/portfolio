@@ -178,7 +178,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                     height={cover.height}
                     alt=""
                     sizes="240px"
-                    className="aspect-[4/3] w-full self-center rounded-xl object-cover"
+                    className="h-auto w-full self-center rounded-xl"
                   />
                 )}
               </Link>

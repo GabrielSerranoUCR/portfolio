@@ -54,10 +54,12 @@ const mangakaPos: Project = {
     "Blazor Server",
     "MudBlazor",
     "EF Core",
-    "PostgreSQL (Neon)",
+    "PostgreSQL",
+    "Better Auth",
+    "Coolify",
     "Kiota",
     "QuestPDF",
-    "Cloudflare R2 + Workers",
+    "Cloudflare R2",
     "Resend",
     "Google Drive API",
     "xUnit",
@@ -67,7 +69,7 @@ const mangakaPos: Project = {
     "CodeQL",
     "SonarQube",
   ],
-  cover: { src: "/photos/me/bookstore.webp", width: 1800, height: 1350 },
+  cover: { src: "/projects/mangakacr-pos/invoicing-pos.webp", width: 1440, height: 1000 },
   gallery: [
     mangakaShot(
       "home",
@@ -247,9 +249,11 @@ const mangakaPos: Project = {
     ),
   ],
   stats: [
-    { value: "916", label: { en: "automated tests", es: "pruebas automatizadas" } },
-    { value: "28", label: { en: "app screens", es: "pantallas" } },
-    { value: "10", label: { en: "business modules", es: "módulos de negocio" } },
+    { value: "1,385", label: { en: "automated test methods", es: "métodos de prueba automatizados" } },
+    { value: "180", label: { en: "API endpoints", es: "endpoints de la API" } },
+    { value: "75k+", label: { en: "lines of C#", es: "líneas de C#" } },
+    { value: "107", label: { en: "Razor components", es: "componentes Razor" } },
+    { value: "40", label: { en: "database migrations", es: "migraciones de base de datos" } },
   ],
   overview: [
     {
@@ -257,8 +261,8 @@ const mangakaPos: Project = {
       es: "MangaKaCR es una librería independiente de manga en San José. Antes manejaba sus ventas e inventario en un sistema contable de terceros; lo reemplacé con una plataforma hecha desde cero alrededor de cómo trabaja realmente la tienda: ventas en mostrador con varios métodos de pago, apartados, turnos de caja, reabastecimientos masivos, cashback para clientes, avisos de reabastecimiento y un catálogo imprimible que se actualiza solo todos los días.",
     },
     {
-      en: "**I was the only person on the project.** I designed the architecture and domain model, wrote the API, the admin web app, the PDFs and emails, the 916 automated tests and the CI/CD pipelines, migrated the infrastructure mid-project, and I deploy and support it in production. The store let me publish it here.",
-      es: "**Fui la única persona en el proyecto.** Diseñé la arquitectura y el modelo de dominio, escribí la API, la aplicación web de administración, los PDF y correos, las 916 pruebas automatizadas y los pipelines de CI/CD, migré la infraestructura a mitad del proyecto y lo despliego y le doy soporte en producción. La tienda me permitió publicarlo aquí.",
+      en: "**I was the only person on the project.** I designed the architecture and domain model, wrote the API, the admin web app, the PDFs and emails, the automated tests and the CI/CD pipelines, migrated the infrastructure twice, and I deploy and support it in production. The store let me publish it here.",
+      es: "**Fui la única persona en el proyecto.** Diseñé la arquitectura y el modelo de dominio, escribí la API, la aplicación web de administración, los PDF y correos, las pruebas automatizadas y los pipelines de CI/CD, migré la infraestructura dos veces y lo despliego y le doy soporte en producción. La tienda me permitió publicarlo aquí.",
     },
   ],
   sections: [
@@ -266,8 +270,8 @@ const mangakaPos: Project = {
       title: { en: "Architecture", es: "Arquitectura" },
       paragraphs: [
         {
-          en: "The system is two .NET 9 applications, each split into clean-architecture layers (Domain → Application → Infrastructure → Presentation, plus a composition project for dependency injection):",
-          es: "El sistema son dos aplicaciones .NET 9, cada una dividida en capas de arquitectura limpia (Dominio → Aplicación → Infraestructura → Presentación, más un proyecto de composición para la inyección de dependencias):",
+          en: "The back office is two .NET 9 applications, each split into clean-architecture layers (Domain → Application → Infrastructure → Presentation, plus a composition project for dependency injection):",
+          es: "El back office son dos aplicaciones .NET 9, cada una dividida en capas de arquitectura limpia (Dominio → Aplicación → Infraestructura → Presentación, más un proyecto de composición para la inyección de dependencias):",
         },
       ],
       bullets: [
@@ -284,8 +288,8 @@ const mangakaPos: Project = {
           es: "Un modelo de dominio rico: entidades y objetos de valor que se validan a sí mismos (precio, costo, código CABYS, cédula, correo, teléfono, ubicación de bodega…) con excepciones de dominio traducidas a respuestas HTTP en el borde.",
         },
         {
-          en: "PostgreSQL with 34 EF Core migrations, product images in Cloudflare R2, transactional email through Resend, documents with QuestPDF, a daily Google Drive sync and lookups against Costa Rica's Hacienda API.",
-          es: "PostgreSQL con 34 migraciones de EF Core, imágenes de productos en Cloudflare R2, correos transaccionales con Resend, documentos con QuestPDF, una sincronización diaria con Google Drive y consultas a la API de Hacienda.",
+          en: "PostgreSQL with 40 EF Core migrations, product images in Cloudflare R2, transactional email through Resend, documents with QuestPDF, a daily Google Drive sync and lookups against Costa Rica's Hacienda API.",
+          es: "PostgreSQL con 40 migraciones de EF Core, imágenes de productos en Cloudflare R2, correos transaccionales con Resend, documentos con QuestPDF, una sincronización diaria con Google Drive y consultas a la API de Hacienda.",
         },
       ],
     },
@@ -430,8 +434,8 @@ const mangakaPos: Project = {
       title: { en: "Administration and auditing", es: "Administración y bitácoras" },
       bullets: [
         {
-          en: "Sign-in through Neon Auth. The first sign-in creates an **access request** that an administrator approves (assigning a role) or rejects. Administrators can't change their own role or status.",
-          es: "Inicio de sesión con Neon Auth. El primer ingreso crea una **solicitud de acceso** que un administrador aprueba (asignando un rol) o rechaza. Los administradores no pueden cambiar su propio rol ni estado.",
+          en: "Sign-in through a self-hosted **Better Auth** service that issues the JWTs the .NET apps validate. The first sign-in creates an **access request** that an administrator approves (assigning a role) or rejects. Administrators can't change their own role or status.",
+          es: "Inicio de sesión con un servicio **Better Auth** autoalojado que emite los JWT que validan las aplicaciones .NET. El primer ingreso crea una **solicitud de acceso** que un administrador aprueba (asignando un rol) o rechaza. Los administradores no pueden cambiar su propio rol ni estado.",
         },
         {
           en: "Searchable audit trails for products (with field-level change detail), clients, sales and invoices, plus company settings (tax regime, economic activity, terms and notes) that print on every receipt.",
@@ -443,45 +447,381 @@ const mangakaPos: Project = {
       title: { en: "Quality, delivery and operations", es: "Calidad, entrega y operación" },
       bullets: [
         {
-          en: "**916 automated tests** across five projects: domain, application (Moq), infrastructure, presentation, and 87 integration tests that run against a real PostgreSQL in **Testcontainers** for the risky paths (cashback, layaway payoffs, shift reconciliation, cascade deletes).",
-          es: "**916 pruebas automatizadas** en cinco proyectos: dominio, aplicación (Moq), infraestructura, presentación y 87 pruebas de integración contra un PostgreSQL real en **Testcontainers** para los caminos delicados (cashback, liquidación de apartados, conciliación de turnos, borrados en cascada).",
+          en: "**Over 1,300 automated tests** across the domain, application, infrastructure and presentation projects, including integration tests that run against a real PostgreSQL in **Testcontainers** for the risky paths (cashback, layaway payoffs, shift reconciliation, cascade deletes).",
+          es: "**Más de 1.300 pruebas automatizadas** en los proyectos de dominio, aplicación, infraestructura y presentación, incluidas pruebas de integración contra un PostgreSQL real en **Testcontainers** para los caminos delicados (cashback, liquidación de apartados, conciliación de turnos, borrados en cascada).",
         },
         {
-          en: "GitHub Actions for build and test, **CodeQL** analysis, and Docker images for both apps pushed to GHCR on every merge to main, built on a self-hosted Docker runner I set up. Local **SonarQube** analysis with coverage.",
-          es: "GitHub Actions para compilar y probar, análisis con **CodeQL** e imágenes Docker de ambas aplicaciones publicadas en GHCR en cada merge a main, construidas en un runner Docker propio que configuré. Análisis local con **SonarQube** y cobertura.",
+          en: "GitHub Actions for build and test, **CodeQL** analysis, and Docker images for every service pushed to GHCR on every merge to main, built on a self-hosted Docker runner I set up. A deploy job then calls Coolify's API and waits for the rollout to finish or fail. Local **SonarQube** analysis with coverage.",
+          es: "GitHub Actions para compilar y probar, análisis con **CodeQL** e imágenes Docker de cada servicio publicadas en GHCR en cada merge a main, construidas en un runner Docker propio que configuré. Luego un job de despliegue llama a la API de Coolify y espera a que termine o falle. Análisis local con **SonarQube** y cobertura.",
         },
         {
-          en: "Mid-project I migrated images from Supabase Storage to Cloudflare R2 and auth and database to Neon, bridging Neon's EdDSA-signed JWTs into .NET's token validation.",
-          es: "A mitad del proyecto migré las imágenes de Supabase Storage a Cloudflare R2 y la autenticación y la base de datos a Neon, haciendo que la validación de tokens de .NET aceptara los JWT firmados con EdDSA de Neon.",
+          en: "Mid-project I migrated images from Supabase Storage to Cloudflare R2 and auth and database to Neon, bridging Neon's EdDSA-signed JWTs into .NET's token validation. In October I moved everything again, to **a VPS managed with Coolify**: Postgres with its own backups, and Neon Auth replaced by a self-hosted Better Auth server that serves the same endpoints and JWTs, so no C# auth code changed and existing users and password hashes carried over.",
+          es: "A mitad del proyecto migré las imágenes de Supabase Storage a Cloudflare R2 y la autenticación y la base de datos a Neon, haciendo que la validación de tokens de .NET aceptara los JWT firmados con EdDSA de Neon. En octubre lo moví de nuevo, a **un VPS administrado con Coolify**: Postgres con sus propios respaldos y Neon Auth reemplazado por un servidor Better Auth autoalojado que ofrece los mismos endpoints y JWT, así que no cambió nada del código de autenticación en C# y se conservaron los usuarios y sus contraseñas.",
         },
         {
-          en: "Because the store's .cr registrar can't delegate DNS to Cloudflare, I serve the R2 images through a **Cloudflare Worker** with edge caching instead of a custom domain.",
-          es: "Como el registrador .cr de la tienda no permite delegar el DNS a Cloudflare, sirvo las imágenes de R2 mediante un **Cloudflare Worker** con caché en el borde en lugar de un dominio propio.",
+          en: "Product images live in a Cloudflare R2 bucket served from a custom subdomain, **images.mangaka.co.cr**, so the POS and the online store load them from the store's own domain.",
+          es: "Las imágenes de productos viven en un bucket de Cloudflare R2 servido desde un subdominio propio, **images.mangaka.co.cr**, así que el POS y la tienda en línea las cargan desde el dominio de la propia tienda.",
         },
         {
-          en: "A Git flow with feature branches, versioned releases promoted from development to main, and a published import schema for bulk-loading products crawled from the store's online shop. Next up: connecting the e-commerce storefront through a backend-for-frontend.",
-          es: "Un flujo de Git con ramas por funcionalidad, versiones publicadas de development a main y un esquema documentado para importar masivamente los productos de la tienda en línea. Lo siguiente: conectar la tienda en línea mediante un backend-for-frontend.",
+          en: "A Git flow with feature branches, versioned releases promoted from development to main, and a published import schema for bulk-loading products crawled from the store's online shop.",
+          es: "Un flujo de Git con ramas por funcionalidad, versiones publicadas de development a main y un esquema documentado para importar masivamente los productos de la tienda en línea.",
         },
       ],
     },
   ],
 };
 
+/** A 1440×1000 screenshot of the MangaKaCR online store. */
+const storeShot = (file: string, caption: L, description: L): GalleryImage => ({
+  src: `/projects/mangakacr-storefront/${file}.webp`,
+  width: 1440,
+  height: 1000,
+  caption,
+  description,
+});
+
+const mangakaStore: Project = {
+  slug: "mangakacr-storefront",
+  title: "MangaKaCR Online Store",
+  period: { en: "Oct 2026 – Present", es: "Oct. 2026 – actualidad" },
+  role: {
+    en: "Sole designer and developer: Figma screen designs, storefront, orders API, WhatsApp verification, Correos tracking, SEO and deployment",
+    es: "Diseñador y desarrollador único: diseño de pantallas en Figma, tienda, API de pedidos, verificación por WhatsApp, rastreo de Correos, SEO y despliegue",
+  },
+  summary: {
+    en: "The e-commerce site of MangaKaCR, a manga bookstore in San José: catalog, customer accounts, carts, online orders and shipment tracking, wired to the store's own POS.",
+    es: "El sitio de comercio electrónico de MangaKaCR, una librería de manga en San José: catálogo, cuentas de clientes, carritos, pedidos en línea y rastreo de envíos, conectado al POS de la propia tienda.",
+  },
+  links: { live: "https://mangaka.co.cr" },
+  gallery: [
+    storeShot(
+      "home",
+      { en: "Home", es: "Inicio" },
+      {
+        en: "The landing page: a hero with the latest arrivals and a featured volume, then new releases and best-sellers, with the search bar, account, wishlist and cart always in reach.",
+        es: "La página de inicio: un hero con las últimas llegadas y un tomo destacado, luego novedades y más vendidos, con la búsqueda, la cuenta, la lista de deseos y el carrito siempre a mano.",
+      },
+    ),
+    storeShot(
+      "catalog",
+      { en: "Catalog", es: "Catálogo" },
+      {
+        en: "All 7,000+ products with multi-select filters, sorting (most recent, biggest discount and more) and add-to-cart on every card. Sold-out titles are greyed out and can't be added.",
+        es: "Más de 7.000 productos con filtros de selección múltiple, orden (más recientes, mayor descuento y más) y agregar al carrito en cada tarjeta. Los títulos agotados se ven en gris y no se pueden agregar.",
+      },
+    ),
+    storeShot(
+      "product",
+      { en: "Product page", es: "Página de producto" },
+      {
+        en: "Price, availability, quantity and add-to-cart, the shipping and payment options, and a spec sheet with author, collection, publisher, demographic, type and categories.",
+        es: "Precio, disponibilidad, cantidad y agregar al carrito, las opciones de envío y pago, y una ficha técnica con autor, colección, editorial, demografía, tipo y categorías.",
+      },
+    ),
+    storeShot(
+      "cart",
+      { en: "Cart", es: "Carrito" },
+      {
+        en: "A persistent cart with quantity controls and a live stock check; shipping is quoted at the next step, once the postal code is known, and the API decides every price.",
+        es: "Un carrito persistente con control de cantidad y verificación de inventario en vivo; el envío se cotiza en el siguiente paso, cuando se conoce el código postal, y la API decide cada precio.",
+      },
+    ),
+    storeShot(
+      "collections",
+      { en: "Collections", es: "Colecciones" },
+      {
+        en: "Every series in the store, so a reader can jump straight to all the volumes of a title.",
+        es: "Todas las series de la tienda, para ir directo a todos los tomos de un título.",
+      },
+    ),
+    storeShot(
+      "collection-detail",
+      { en: "Collection", es: "Colección" },
+      {
+        en: "A series page with its cover collage and every volume, sortable and ready to add to the cart.",
+        es: "La página de una serie con su collage de portadas y todos sus tomos, ordenables y listos para agregar al carrito.",
+      },
+    ),
+    storeShot(
+      "publishers",
+      { en: "Publishers", es: "Editoriales" },
+      {
+        en: "Browse the catalog by publisher, using the logos managed from the POS.",
+        es: "El catálogo por editorial, con los logos que se administran desde el POS.",
+      },
+    ),
+    storeShot(
+      "how-to-buy",
+      { en: "How to buy", es: "Cómo comprar" },
+      {
+        en: "A four-step guide to ordering, paying, shipping or pickup and invoices, plus an FAQ, linked from the header and the footer.",
+        es: "Una guía de cuatro pasos para pedir, pagar, recibir o recoger y las facturas, más preguntas frecuentes, enlazada desde el encabezado y el pie de página.",
+      },
+    ),
+    storeShot(
+      "login",
+      { en: "Sign in and register", es: "Ingresar y registrarse" },
+      {
+        en: "Sign-in on the left and registration on the right, with live password rules. New customers register with their cédula and verify their phone with a code sent through WhatsApp.",
+        es: "Inicio de sesión a la izquierda y registro a la derecha, con reglas de contraseña en vivo. Los clientes nuevos se registran con su cédula y verifican su teléfono con un código enviado por WhatsApp.",
+      },
+    ),
+  ],
+  stack: [
+    "Next.js 16",
+    "React 19",
+    "TypeScript",
+    "Tailwind CSS",
+    "C# / .NET 9",
+    "ASP.NET Core Minimal APIs",
+    "PostgreSQL",
+    "Twilio WhatsApp",
+    "Correos de Costa Rica API",
+    "Resend",
+    "Docker",
+    "Coolify",
+    "GitHub Actions",
+  ],
+  stats: [
+    { value: "24", label: { en: "storefront pages", es: "páginas de la tienda" } },
+    { value: "84", label: { en: "React components", es: "componentes de React" } },
+    { value: "15k+", label: { en: "lines of TypeScript", es: "líneas de TypeScript" } },
+  ],
+  overview: [
+    {
+      en: "The online store is the second half of the platform behind MangaKaCR's POS: a separate **Next.js 16** app in Spanish, built from a complete set of screen designs I created in Figma and live at mangaka.co.cr. Catalog, orders and stock all come from a backend-for-frontend layer I added to the same .NET API, which owns prices, shipping and inventory; the storefront only keeps its own customer sessions.",
+      es: "La tienda en línea es la segunda mitad de la plataforma detrás del POS de MangaKaCR: una aplicación **Next.js 16** aparte, en español, construida a partir de un diseño completo de pantallas en Figma creado por mí y en línea en mangaka.co.cr. El catálogo, los pedidos y el inventario vienen de una capa backend-for-frontend que agregué a la misma API de .NET, que es dueña de los precios, el envío y el inventario; la tienda solo conserva sus propias sesiones de clientes.",
+    },
+    {
+      en: "**I was the only person on the project**, from designing the screens in Figma to the production deploy, and the staff manage every order from the POS.",
+      es: "**Fui la única persona en el proyecto**, desde el diseño de las pantallas en Figma hasta el despliegue en producción, y el personal administra cada pedido desde el POS.",
+    },
+  ],
+  sections: [
+    {
+      title: { en: "Catalog and discovery", es: "Catálogo y descubrimiento" },
+      bullets: [
+        {
+          en: "Home, catalog with multi-select filters matching any selected value, an on-sale filter and a biggest-discount sort, live search, product pages, and publisher and collection pages.",
+          es: "Inicio, catálogo con filtros de selección múltiple que coinciden con cualquier valor elegido, filtro de ofertas y orden por mayor descuento, búsqueda en vivo, páginas de producto y de editoriales y colecciones.",
+        },
+        {
+          en: "Performance work on both sides: best-sellers load in batches instead of one query per product, related rows skip the total count, public search queries were tuned, and the page texture, footer silhouette and animations were shrunk.",
+          es: "Trabajo de rendimiento en ambos lados: los más vendidos se cargan por lotes en lugar de una consulta por producto, las filas relacionadas omiten el conteo total, se optimizaron las búsquedas públicas y se redujeron la textura, la silueta del pie de página y las animaciones.",
+        },
+        {
+          en: "**SEO**: robots, a sitemap built per request from every product, collection and publisher (tolerant of API failures), canonical URLs, Open Graph, Product JSON-LD, and noindex on filtered views.",
+          es: "**SEO**: robots, un sitemap generado por solicitud con todos los productos, colecciones y editoriales (tolerante a fallos de la API), URL canónicas, Open Graph, JSON-LD de producto y noindex en vistas filtradas.",
+        },
+      ],
+    },
+    {
+      title: { en: "Customer accounts", es: "Cuentas de clientes" },
+      bullets: [
+        {
+          en: "Accounts are tied to the same client records the POS uses. Registration looks the cédula up (name from Hacienda when known) and verifies the phone with a **6-digit WhatsApp code** sent through Twilio: stored hashed, valid 10 minutes, resendable after 60 seconds and burned after 5 wrong tries.",
+          es: "Las cuentas se ligan a los mismos registros de clientes que usa el POS. El registro consulta la cédula (con el nombre de Hacienda cuando se conoce) y verifica el teléfono con un **código de 6 dígitos por WhatsApp** enviado con Twilio: se guarda con hash, dura 10 minutos, se reenvía tras 60 segundos y se invalida tras 5 intentos fallidos.",
+        },
+        {
+          en: "Storefront sessions are never accepted by the staff API, so customers can't reach staff routes. The API is reachable only through the storefront's server-side layer.",
+          es: "La API del personal nunca acepta las sesiones de la tienda, así que los clientes no pueden llegar a rutas del personal. La API solo es accesible desde la capa del servidor de la tienda.",
+        },
+        {
+          en: "Password reset by email, profile editing, order and invoice history with downloads, a wishlist and restock alerts for sold-out products.",
+          es: "Recuperación de contraseña por correo, edición del perfil, historial de pedidos y facturas con descarga, lista de deseos y alertas de reabastecimiento para productos agotados.",
+        },
+      ],
+    },
+    {
+      title: { en: "Carts, checkout and orders", es: "Carrito, pago y pedidos" },
+      bullets: [
+        {
+          en: "A persistent cart per account (local for anonymous visitors and merged on login), with a stock check before adding and whenever quantities change.",
+          es: "Un carrito persistente por cuenta (local para visitantes anónimos y combinado al iniciar sesión), con verificación de inventario antes de agregar y al cambiar cantidades.",
+        },
+        {
+          en: "Shipping is quoted from the postal code (inside or outside the GAM, or free pickup). Prices, shipping and stock are always decided by the API, never trusted from the browser.",
+          es: "El envío se cotiza según el código postal (dentro o fuera de la GAM, o recogida gratis). Los precios, el envío y el inventario los decide siempre la API, nunca el navegador.",
+        },
+        {
+          en: "**Order lifecycle**: stock is reserved when an order is placed and released on cancellation. Unpaid orders expire after 3 working hours, counted only inside store hours and while a shift is open. A draft invoice with frozen prices is emitted when payment is marked as paid, and cancelling a paid order within 24 working hours voids it.",
+          es: "**Ciclo de vida del pedido**: el inventario se reserva al hacer el pedido y se libera al cancelar. Los pedidos sin pagar vencen a las 3 horas hábiles, contadas solo dentro del horario de la tienda y con un turno abierto. Al marcar el pago se emite una factura borrador con precios congelados, y cancelar un pedido pagado dentro de 24 horas hábiles la anula.",
+        },
+        {
+          en: "Every status change is audited and emailed to the customer through an outbox, and the invoice is emailed on payment when requested.",
+          es: "Cada cambio de estado se audita y se envía por correo al cliente mediante un outbox, y la factura se envía al pagar cuando el cliente lo pide.",
+        },
+        {
+          en: "**In the POS**: a Pedidos list and detail with status and cancel dialogs, an internal order counter, a flag on clients who own a storefront account, and a product preview dialog.",
+          es: "**En el POS**: lista y detalle de Pedidos con diálogos de estado y cancelación, un contador interno de pedidos, una marca en los clientes con cuenta en la tienda y un diálogo de vista previa del producto.",
+        },
+      ],
+    },
+    {
+      title: { en: "Shipping with Correos de Costa Rica", es: "Envíos con Correos de Costa Rica" },
+      bullets: [
+        {
+          en: "Saving the tracking number in the POS ships the order. The storefront's “Estado del pedido” page shows a step tracker and a history that merges the order's own milestones with Correos' tracker cards, reproducing the carrier's public tracker rules and checked against its published test vectors.",
+          es: "Guardar la guía en el POS despacha el pedido. La página “Estado del pedido” de la tienda muestra un seguimiento por pasos y un historial que combina los hitos del pedido con las tarjetas del rastreo de Correos, reproduciendo las reglas del rastreador público del correo y verificado con sus vectores de prueba publicados.",
+        },
+        {
+          en: "Correos responses are cached for 2 minutes and their events are stored, so ones Correos stops listing aren't lost. If Correos is down the order's own steps still come back, and the tracking loads with Suspense so the rest of the page shows at once.",
+          es: "Las respuestas de Correos se guardan en caché 2 minutos y sus eventos se almacenan, para no perder los que Correos deje de listar. Si Correos no responde, los pasos del propio pedido siguen apareciendo, y el rastreo se carga con Suspense para mostrar el resto de la página de inmediato.",
+        },
+        {
+          en: "Correos only answers connections from Costa Rica and the VPS isn't one, so I built a small autossh container that opens a reverse SSH tunnel from a computer in the country and exposes a SOCKS5 proxy, reachable only from Docker, that the API uses for every Correos call.",
+          es: "Correos solo responde a conexiones desde Costa Rica y el VPS no lo es, así que construí un pequeño contenedor autossh que abre un túnel SSH inverso desde una computadora en el país y expone un proxy SOCKS5, accesible solo desde Docker, que la API usa en cada llamada a Correos.",
+        },
+      ],
+    },
+    {
+      title: { en: "Delivery", es: "Entrega" },
+      bullets: [
+        {
+          en: "Deployed on the store's VPS through Coolify with its own pipeline, branded error pages, a favicon and icons, a developer credit and a banner announcing the domain move.",
+          es: "Desplegada en el VPS de la tienda con Coolify y su propio pipeline, con páginas de error con la marca, favicon e íconos, un crédito del desarrollador y un banner que anuncia el cambio de dominio.",
+        },
+        {
+          en: "Work flows through feature branches and pull requests into a development branch, with the API changes shipped first whenever the storefront depends on them.",
+          es: "El trabajo fluye por ramas de funcionalidad y pull requests hacia una rama de desarrollo, desplegando primero los cambios de la API cuando la tienda depende de ellos.",
+        },
+      ],
+    },
+  ],
+};
+
+/** A 1440×1000 screenshot of the LASCE site. */
+const lasceShot = (file: string, caption: L, description: L): GalleryImage => ({
+  src: `/projects/lasce-lab-platform/${file}.webp`,
+  width: 1440,
+  height: 1000,
+  caption,
+  description,
+});
+
 const lasce: Project = {
   slug: "lasce-lab-platform",
   title: "LASCE Research Lab Platform",
   period: { en: "Aug 2026 – Present", es: "Ago. 2026 – actualidad" },
   role: {
-    en: "Full-stack developer on team g02 (publications, in-place CMS, news, admin dashboard)",
-    es: "Desarrollador full-stack del equipo g02 (publicaciones, CMS en sitio, noticias, panel de administración)",
+    en: "Full-stack developer on team g02 (publications, in-place CMS, news, home and research areas, admin panel, audit trail)",
+    es: "Desarrollador full-stack del equipo g02 (publicaciones, CMS en sitio, noticias, inicio y áreas de investigación, panel de administración, auditoría)",
   },
   summary: {
-    en: "The web platform for UCR's Space Weather Lab. I built its research publications, the in-place CMS and the news management.",
-    es: "La plataforma web del Laboratorio de Clima Espacial de la UCR. Construí sus publicaciones de investigación, el CMS en sitio y la gestión de noticias.",
+    en: "The web platform for UCR's Space Weather Lab, live at lasce.ucr.ac.cr. I built its research publications, the in-place CMS, news and home management, and the admin panel with its audit trail.",
+    es: "La plataforma web del Laboratorio de Clima Espacial de la UCR, en lasce.ucr.ac.cr. Construí sus publicaciones de investigación, el CMS en sitio, la gestión de noticias y del inicio, y el panel de administración con su bitácora de auditoría.",
   },
-  stack: ["Next.js 16", "TypeScript", "Prisma", "PostgreSQL", "SQLAlchemy", "Vitest", "Storybook", "Playwright", "MinIO", "Turborepo"],
-  links: { repo: "https://github.com/LasceUCR/lasce" },
+  stack: ["Next.js 16", "TypeScript", "Prisma", "PostgreSQL", "SQLAlchemy", "Vitest", "Storybook", "Playwright", "MinIO", "Turborepo", "next-intl"],
+  links: { live: "https://lasce.ucr.ac.cr", repo: "https://github.com/LasceUCR/lasce" },
+  gallery: [
+    lasceShot(
+      "home",
+      { en: "Home", es: "Inicio" },
+      {
+        en: "The lab's landing page. The banner text and the four geomagnetic indices (Kp, Dst, AE, Ap) are what I made editable in both languages, with the indices reordered by dragging.",
+        es: "La página de inicio del laboratorio. El texto del banner y los cuatro índices geomagnéticos (Kp, Dst, AE, Ap) son lo que hice editable en ambos idiomas, con los índices reordenables arrastrando.",
+      },
+    ),
+    lasceShot(
+      "research",
+      { en: "Research areas", es: "Áreas de investigación" },
+      {
+        en: "Each area shows in the visitor's language. Administrators edit its title and description in Spanish and English with a shared photo, and long descriptions end in an inline “Leer más”.",
+        es: "Cada área se muestra en el idioma del visitante. Los administradores editan su título y descripción en español e inglés con una foto compartida, y las descripciones largas terminan en un “Leer más” en línea.",
+      },
+    ),
+    lasceShot(
+      "publications",
+      { en: "Scientific publications", es: "Publicaciones científicas" },
+      {
+        en: "Publications read from the research schema in PostgreSQL, with search, a filter and authors kept in citation order.",
+        es: "Publicaciones leídas del esquema de investigación en PostgreSQL, con búsqueda, un filtro y los autores en orden de citación.",
+      },
+    ),
+    lasceShot(
+      "news",
+      { en: "News and media coverage", es: "Noticias y cobertura mediática" },
+      {
+        en: "The news explorer and academic activities, managed through the in-place CMS: article form, editable cards and permission-gated create, edit and delete.",
+        es: "El explorador de noticias y las actividades académicas, administrados con el CMS en sitio: formulario de artículos, tarjetas editables y crear, editar y eliminar según permisos.",
+      },
+    ),
+    lasceShot(
+      "gallery",
+      { en: "Gallery", es: "Galería" },
+      {
+        en: "Albums of photos and video. Each album's period is chosen with start and optional end year and month selects instead of free text.",
+        es: "Álbumes de fotos y video. El período de cada álbum se elige con selectores de año y mes de inicio y fin opcional en lugar de texto libre.",
+      },
+    ),
+    lasceShot(
+      "data",
+      { en: "Data", es: "Datos" },
+      {
+        en: "Today's Sun in six ultraviolet bands from GOES SUVI, and a public query form for the lab's observed data, backed by the worker and the time-series store.",
+        es: "El Sol de hoy en seis bandas ultravioleta de GOES SUVI y un formulario público de consulta de los datos observados del laboratorio, respaldado por el worker y la base de series de tiempo.",
+      },
+    ),
+    lasceShot(
+      "admin-summary",
+      { en: "Admin summary", es: "Resumen de administración" },
+      {
+        en: "Live counts of the content managed through the CMS, recent activity from the audit trail and the state of the platform's services. Names are blurred.",
+        es: "Conteos en vivo del contenido administrado con el CMS, la actividad reciente de la bitácora de auditoría y el estado de los servicios de la plataforma. Los nombres están difuminados.",
+      },
+    ),
+    lasceShot(
+      "admin-audit",
+      { en: "Audit trail", es: "Auditoría" },
+      {
+        en: "Every administrative change with who made it, what it was and when, filterable by date, person, element type and action. Names are blurred.",
+        es: "Cada cambio administrativo con quién lo hizo, qué fue y cuándo, filtrable por fecha, persona, tipo de elemento y acción. Los nombres están difuminados.",
+      },
+    ),
+    lasceShot(
+      "admin-permissions",
+      { en: "Permissions", es: "Permisos" },
+      {
+        en: "The permissions of each role, editable with a confirmation step before saving. The administrator's permissions are fixed.",
+        es: "Los permisos de cada rol, editables con un paso de confirmación antes de guardar. Los permisos de la persona administradora son fijos.",
+      },
+    ),
+    lasceShot(
+      "edit-home",
+      { en: "Home in edit mode", es: "Inicio en modo edición" },
+      {
+        en: "With edit mode on, the banner and each geomagnetic index get edit controls, and the indices can be dragged to reorder.",
+        es: "Con el modo edición activado, el banner y cada índice geomagnético muestran controles de edición, y los índices se pueden arrastrar para reordenarlos.",
+      },
+    ),
+    lasceShot(
+      "edit-research",
+      { en: "Research areas in edit mode", es: "Áreas de investigación en modo edición" },
+      {
+        en: "Add, edit and delete research areas where they are read, with the in-place CMS wrapper adding the controls to each card.",
+        es: "Agregar, editar y eliminar áreas de investigación donde se leen, con el envoltorio del CMS en sitio que agrega los controles a cada tarjeta.",
+      },
+    ),
+    lasceShot(
+      "edit-news",
+      { en: "News in edit mode", es: "Noticias en modo edición" },
+      {
+        en: "An add-news card and edit and delete buttons on every article, each shown only to people who hold that permission.",
+        es: "Una tarjeta para agregar noticias y botones de editar y eliminar en cada artículo, cada uno visible solo para quien tiene ese permiso.",
+      },
+    ),
+    lasceShot(
+      "edit-gallery",
+      { en: "Gallery in edit mode", es: "Galería en modo edición" },
+      {
+        en: "Albums and images can be added, edited and deleted in place. The album period uses the start and end selects.",
+        es: "Los álbumes y las imágenes se agregan, editan y eliminan en el lugar. El período del álbum usa los selectores de inicio y fin.",
+      },
+    ),
+  ],
   stats: [
+    { value: "17", label: { en: "merged pull requests", es: "pull requests integrados" } },
+    { value: "22k+", label: { en: "lines added", es: "líneas agregadas" } },
     { value: "20+", label: { en: "tested components", es: "componentes con pruebas" } },
   ],
   overview: [
@@ -543,6 +883,27 @@ const lasce: Project = {
       ],
     },
     {
+      title: { en: "Home page and research areas, in both languages", es: "Inicio y áreas de investigación, en ambos idiomas" },
+      bullets: [
+        {
+          en: "**Home page management**: new tables for the hero banner and the geomagnetic indices (Kp, Dst, AE, Ap) with translation tables and a migration seeded with the text the page already showed, a service and API routes, and editors in edit mode for the title, subtitle and each index in Spanish and English, with the indices reordered by dragging.",
+          es: "**Gestión del inicio**: tablas nuevas para el banner y los índices geomagnéticos (Kp, Dst, AE, Ap) con tablas de traducción y una migración sembrada con el texto que la página ya mostraba, un servicio y rutas de API, y editores en modo edición para el título, el subtítulo y cada índice en español e inglés, con los índices reordenables arrastrando.",
+        },
+        {
+          en: "**Research areas**: the visitor reads each area in the language chosen in the header, and administrators edit title and description in both languages with a shared photo. Writes are transactional and versioned so two editors can't overwrite each other, and every outcome is reported in a toast.",
+          es: "**Áreas de investigación**: el visitante lee cada área en el idioma elegido en el encabezado, y los administradores editan título y descripción en ambos idiomas con una foto compartida. Las escrituras son transaccionales y versionadas para que dos editores no se sobrescriban, y cada resultado se informa con un toast.",
+        },
+        {
+          en: "A reusable **TruncatedText** component that cuts long text after a chosen number of lines and adds an inline \"Leer más\" / \"Leer menos\" disclosure only when the text really overflows.",
+          es: "Un componente reutilizable **TruncatedText** que corta el texto largo tras cierto número de líneas y agrega un \"Leer más\" / \"Leer menos\" en línea solo cuando el texto realmente se desborda.",
+        },
+        {
+          en: "Mirrored every new table in the Python worker's SQLAlchemy models with model tests, and added a period picker (start and optional end year and month) to the gallery album form, stored in the same string format so no migration was needed.",
+          es: "Repliqué cada tabla nueva en los modelos SQLAlchemy del worker en Python con pruebas de modelo, y agregué al formulario de álbumes de la galería un selector de período (año y mes de inicio y fin opcional) que guarda el mismo formato de texto y no requirió migración.",
+        },
+      ],
+    },
+    {
       title: { en: "Admin dashboard and uploads", es: "Panel de administración y archivos" },
       bullets: [
         {
@@ -555,66 +916,24 @@ const lasce: Project = {
         },
       ],
     },
-  ],
-};
-
-const microscope: Project = {
-  slug: "virtual-microscope",
-  title: "Virtual Microscope Admin Panel",
-  period: { en: "Mar 2026 – Jul 2026", es: "Mar. 2026 – jul. 2026" },
-  role: {
-    en: "Developer on a 3-person team: persistence, the entire frontend and desktop packaging",
-    es: "Desarrollador en un equipo de 3: persistencia, todo el frontend y el empaquetado de escritorio",
-  },
-  summary: {
-    en: "An admin panel for a biology virtual microscope, shipped as a one-click Windows app with its own embedded database.",
-    es: "Un panel de administración para un microscopio virtual de biología, distribuido como aplicación de Windows con su propia base de datos embebida.",
-  },
-  stack: ["C# / .NET", "Blazor WebAssembly", "MudBlazor", "EF Core", "PostgreSQL", "Electron", "Docker"],
-  stats: [],
-  overview: [
     {
-      en: "The panel manages the slide collection of a virtual microscope at UCR: slides grouped by biological group (e.g. bacteria) and storage box, each with an ordered set of microscope images. A teammate had started the API with in-memory repositories; I built most of what turned it into a usable product.",
-      es: "El panel administra la colección de láminas de un microscopio virtual de la UCR: láminas agrupadas por grupo biológico (p. ej. bacterias) y caja, cada una con un conjunto ordenado de imágenes. Un compañero había iniciado la API con repositorios en memoria; yo construí la mayor parte de lo que la convirtió en un producto usable.",
-    },
-  ],
-  sections: [
-    {
-      title: { en: "Persistence", es: "Persistencia" },
+      title: { en: "Admin panel, audit trail and download history", es: "Panel de administración, auditoría e historial de descargas" },
       bullets: [
         {
-          en: "Replaced the in-memory repositories with EF Core over PostgreSQL: a DbContext with Fluent API configurations for boxes, groups, slides and images, value-object conversions, the initial migration and dependency injection wiring.",
-          es: "Reemplacé los repositorios en memoria por EF Core sobre PostgreSQL: un DbContext con configuraciones Fluent API para cajas, grupos, láminas e imágenes, conversiones de objetos de valor, la migración inicial y la inyección de dependencias.",
+          en: "Replaced the dashboard's placeholders with real data: live counts of the managed content, the state of the platform's services (a new health endpoint probing the API, workers, MinIO and InfluxDB in parallel, reachable only by admins) and recent activity.",
+          es: "Reemplacé los datos de relleno del panel por datos reales: conteos en vivo del contenido administrado, el estado de los servicios de la plataforma (un nuevo endpoint de salud que sondea la API, los workers, MinIO e InfluxDB en paralelo, accesible solo para administradores) y la actividad reciente.",
         },
         {
-          en: "A Docker Compose database pinned to Postgres 17 (to match the desktop build), bound to localhost and with a health check.",
-          es: "Una base de datos con Docker Compose fijada a Postgres 17 (igual que la versión de escritorio), accesible solo desde localhost y con health check.",
-        },
-      ],
-    },
-    {
-      title: { en: "The whole frontend", es: "Todo el frontend" },
-      bullets: [
-        {
-          en: "Built the Blazor WebAssembly frontend in clean architecture: a domain with its own value objects, application services, a typed HTTP API client and a MudBlazor UI with UCR's visual identity and an in-app usage guide.",
-          es: "Construí el frontend en Blazor WebAssembly con arquitectura limpia: un dominio con sus propios objetos de valor, servicios de aplicación, un cliente HTTP tipado y una interfaz MudBlazor con la identidad visual de la UCR y una guía de uso integrada.",
+          en: "**Auditoría**: every administrative write (news, publications, research areas, gallery, home, roles and more) now records an audit event inside the same transaction as the change, so a failed write records nothing and deletes still name what was removed. Administrators browse and filter the events in a new section, behind its own permission.",
+          es: "**Auditoría**: cada escritura administrativa (noticias, publicaciones, áreas de investigación, galería, inicio, roles y más) registra ahora un evento de auditoría dentro de la misma transacción del cambio, así que una escritura fallida no registra nada y los borrados siguen nombrando lo eliminado. Los administradores navegan y filtran los eventos en una sección nueva, protegida por su propio permiso.",
         },
         {
-          en: "**Server-side pagination and search** for slides: the endpoint returns a paged envelope with validated page sizes, and the table loads pages from the server with a debounced search and box filter instead of downloading everything.",
-          es: "**Paginación y búsqueda del lado del servidor** para las láminas: el endpoint devuelve una respuesta paginada con tamaños validados, y la tabla carga páginas desde el servidor con búsqueda y filtro por caja con debounce en lugar de descargar todo.",
-        },
-      ],
-    },
-    {
-      title: { en: "One-click desktop app", es: "Aplicación de escritorio en un clic" },
-      bullets: [
-        {
-          en: "Packaged everything as a **Windows installer**: an Electron shell starts an embedded Postgres 17 and the published API, waits for its health endpoint, then opens the app in a native window. **No Docker or database install needed.**",
-          es: "Empaqueté todo como un **instalador de Windows**: un shell de Electron inicia un Postgres 17 embebido y la API publicada, espera su endpoint de salud y abre la aplicación en una ventana nativa. **No requiere Docker ni instalar una base de datos.**",
+          en: "**Download history**: a paginated, filterable list of resource downloads (date range, source, instrument, format, user) behind a dedicated grant, with storage keys never selected. The \"Modo edición\" switch moved into the account menu so editors can enable it from any page.",
+          es: "**Historial de descargas**: una lista paginada y filtrable de descargas de recursos (rango de fechas, fuente, instrumento, formato, usuario) protegida por un permiso propio, sin seleccionar nunca las llaves de almacenamiento. El interruptor de \"Modo edición\" pasó al menú de la cuenta para activarlo desde cualquier página.",
         },
         {
-          en: "The API serves the WebAssembly app with client-side routing fallback and applies migrations on startup with retries for a slow first database boot. A PowerShell script publishes both apps and drives electron-builder.",
-          es: "La API sirve la aplicación WebAssembly con respaldo para el enrutamiento del cliente y aplica las migraciones al iniciar con reintentos por si la base tarda en arrancar. Un script de PowerShell publica ambas aplicaciones y ejecuta electron-builder.",
+          en: "Translated the user management page to Spanish and English, and fixed why uploaded images never displayed on staging (the storage host wasn't reaching the image allowlist at build time), limiting the picker to accepted formats and sizes.",
+          es: "Traduje la página de gestión de usuarios al español y al inglés, y arreglé por qué las imágenes subidas no se mostraban en staging (el host de almacenamiento no llegaba a la lista de imágenes permitidas al compilar), limitando el selector a los formatos y tamaños aceptados.",
         },
       ],
     },
@@ -759,4 +1078,4 @@ const asciiNetwork: Project = {
   ],
 };
 
-export const projects: Project[] = [mangakaPos, lasce, microscope, themePark, asciiNetwork];
+export const projects: Project[] = [mangakaPos, mangakaStore, lasce, themePark, asciiNetwork];

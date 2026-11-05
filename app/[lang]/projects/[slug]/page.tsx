@@ -58,15 +58,29 @@ export default async function ProjectPage({ params }: Props) {
           <span className="text-xs font-semibold tracking-[0.25em] text-scarlet uppercase">{t.project.role}</span>
           <span className="mt-1 block font-medium">{project.role[lang]}</span>
         </p>
-        {project.links?.repo && (
-          <a
-            href={project.links.repo}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-6 inline-block rounded-full border border-ink/20 px-5 py-2 text-sm font-semibold transition-colors hover:border-ink"
-          >
-            {t.project.repo} ↗
-          </a>
+        {(project.links?.live || project.links?.repo) && (
+          <div className="mt-6 flex flex-wrap gap-3">
+            {project.links.live && (
+              <a
+                href={project.links.live}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-block rounded-full border border-ink/20 px-5 py-2 text-sm font-semibold transition-colors hover:border-ink"
+              >
+                {t.project.live} ↗
+              </a>
+            )}
+            {project.links.repo && (
+              <a
+                href={project.links.repo}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-block rounded-full border border-ink/20 px-5 py-2 text-sm font-semibold transition-colors hover:border-ink"
+              >
+                {t.project.repo} ↗
+              </a>
+            )}
+          </div>
         )}
       </header>
 
@@ -91,7 +105,7 @@ export default async function ProjectPage({ params }: Props) {
             alt={project.title}
             sizes="(min-width: 896px) 896px, 100vw"
             priority
-            className="aspect-[16/9] w-full rounded-[0.9rem] object-cover"
+            className="h-auto w-full rounded-[0.9rem]"
           />
         </div>
       )}
